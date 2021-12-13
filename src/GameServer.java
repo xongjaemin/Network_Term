@@ -41,11 +41,6 @@ public class GameServer {
    public static HashMap<PrintWriter, String> writers = new HashMap<PrintWriter, String>();
    // 암호화
    private static Encoder encoder = Base64.getEncoder();
-   // 게임 관리자
-   //public static NumberBaseBall manager = new NumberBaseBall();
-
-   // 게임에 사용될 num(answer)
-   //public static int num = manager.makeNewNum();
 
    // ready를 누른 사람의 수.(2가되면 게임시작.)
    public static int ready = 0;
@@ -443,14 +438,13 @@ public class GameServer {
 
 						}
 
+						
 						else if (splitMessage[1].toLowerCase().startsWith("getreco")) {
 							// input을 " "단위로 쪼갠다.
 							String[] st = splitMessage[1].split(" ");
-							// whisper하고자 하는 대상의 nickname을 s_id에 저장한다.
 							String s_id = st[1];
-							// check message
 							System.out.println(id + " read " + s_id + "'s records");
-
+							
 							for (Person r_user : players) {
 								if (s_id.contentEquals(r_user.getId())) {
 									String records = "READRECO " + r_user.getId() + " " + r_user.getWin() + " "
@@ -460,7 +454,7 @@ public class GameServer {
 								}
 							}
 						}
-
+						
 						else if (splitMessage[1].toLowerCase().startsWith("rqgame")) {
 							// input을 띄어쓰기를 기준으로 split한다.
 							String st[] = splitMessage[1].split(" ");
@@ -503,30 +497,6 @@ public class GameServer {
 							return;
 						}
 
-						// whisper mode
-						else if (splitMessage[1].toLowerCase().startsWith("whisper")) {
-							String st[] = splitMessage[1].split(" "); // input을 띄어쓰기를 기준으로 split한다.
-							String s_id = st[2]; // whisper하고자 하는 대상의 nickname을 s_id에 저장한다.
-							System.out.println(id + " whisper to " + s_id); // check message
-							// 만약 server에 연결 된 user들의 이름 중 s_id과 일치하는 이름이 없다면 그 유저가 없음을 알려준다.
-							if (!ids.contains(s_id)) {
-								out.println("MESSAGE " + s_id + " is not in this server.");
-							} else {
-								// writers hash map에서 value가 보내는 사람의 이름, s_id과 같은 사용자의 client에게 whisper message를
-								// 보낸다.
-								for (PrintWriter writer : writers.keySet()) {
-									if (s_id.contentEquals(writers.get(writer))
-											|| id.contentEquals(writers.get(writer))) {
-										String p_string = "WHISPER " + id + "(whisper to " + s_id + ") :"; // client에게
-										for (int i = 4; i < st.length; i++) { // split한 message를 하나의 string으로 저장한다.
-											p_string = p_string + " " + st[i];
-										}
-										writer.println(p_string); // 해당 client에게 보낸다.
-									} // close if
-								} // close for
-							} // close else
-						} // close if
-
 						else {
 							for (PrintWriter writer : writers.keySet()) {
 								writer.println("MESSAGE " + id + ": " + splitMessage[1]);
@@ -553,23 +523,19 @@ public class GameServer {
 								ready = 0; // init
 								// 게임 시작! 하라고 둘에게 명령!
 								System.out.println("Game Start!");
-								// 둘에 대한 writer찾고 보내주기. GAMESTART & id1 & id2 (id2 & id1) &
 								for (PrintWriter writer : writers.keySet()) {
-									// receiver 찾기.
 									if (splitMessage[1].contentEquals(writers.get(writer))) {
 										writer.println(
 												"GAMESTART&" + splitMessage[2] + "&" + splitMessage[1]);
 
 									}
-									// sender 찾기.
 									if (splitMessage[2].contentEquals(writers.get(writer))) {
 										writer.println(
 												"GAMESTART&" + splitMessage[1] + "&" + splitMessage[2]);
 									}
 
 								}
-								// num 초기화.
-								//num = manager.makeNewNum();
+
 							}
 						}
 
@@ -647,8 +613,6 @@ public class GameServer {
 									// GAMINGMESSAGE & [receiver] & Numbers & result
 									writer.println("GAMINGMESSAGE&" + splitMessage[1] + "&" + splitMessage[4] + "&"
 											+ splitMessage[5]);
-									// System.out.println("SENT!");
-									//System.out.println("Next Game Answer: " + num);
 									break;
 								}
 							}
