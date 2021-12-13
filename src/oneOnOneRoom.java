@@ -130,11 +130,7 @@ public class oneOnOneRoom extends JFrame {
 		chatArea.setEditable(false);
 
 		this.setVisible(true);
-		/**
-		 * chat 기본 틀 게임에서, 내가 상대에게 메세지를 전할거야. Game&[Sender]&[Receiver]&Message&[Message]
-		 * <<message>>
-		 * 
-		 */
+
 		chatField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// enter 방지.

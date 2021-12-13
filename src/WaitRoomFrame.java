@@ -12,7 +12,7 @@ public class WaitRoomFrame {
 	Scanner in;
 	String who = "all";
 
-	int p_index = 0; // player index
+	int user_index = 0; // player index
 	String[] requestType = { "Request Game", "Show Record" };
 
 	JFrame frame = new JFrame("Waiting Room");
@@ -189,7 +189,7 @@ public class WaitRoomFrame {
 				String[] goneId = line.split("&");
 				// 재설정하기.
 				// 이 사람의 버튼 비활성화하고,
-				for (int i = 0; i < p_index; i++) {
+				for (int i = 0; i < user_index; i++) {
 					if (users[i].getText().equals(goneId[1])) {
 						users[i].setVisible(false);
 						onlineUserPanel.remove(users[i]);
@@ -208,7 +208,7 @@ public class WaitRoomFrame {
 				if (otherID.contentEquals(user))
 					isExist = 1;
 
-				for (int i = 0; i < p_index; i++) {
+				for (int i = 0; i < user_index; i++) {
 					if (users[i].getText().equalsIgnoreCase(otherID)) {
 						users[i].setText("");
 						onlineUserPanel.remove(users[i]);
@@ -219,13 +219,13 @@ public class WaitRoomFrame {
 				}
 
 				if (isExist == 0) {
-					users[p_index] = new JButton(otherID);
-					users[p_index].setSize(50, 50);
-					users[p_index].setForeground(new Color(255, 255, 255));
-					users[p_index].setBackground(new Color(0, 191, 255));
-					onlineUserPanel.add(users[p_index]);
+					users[user_index] = new JButton(otherID);
+					users[user_index].setSize(50, 50);
+					users[user_index].setForeground(new Color(255, 255, 255));
+					users[user_index].setBackground(new Color(0, 191, 255));
+					onlineUserPanel.add(users[user_index]);
 
-					users[p_index].addActionListener(new ActionListener() {
+					users[user_index].addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							// 그 사람의 아이디가 적힌 버튼을 누르면 팝업창을 띄워서 게임신청 / 정보보기 를 선택할 수 있도록 한다.
 							int choose = JOptionPane.showOptionDialog(frame, "What do you want to do?", "To " + otherID,
@@ -236,7 +236,7 @@ public class WaitRoomFrame {
 								requestInfo(otherID);
 						}
 					});
-					p_index++;
+					user_index++;
 				}
 
 			} // close else if
@@ -245,7 +245,7 @@ public class WaitRoomFrame {
 				String otherID = line.split(" ")[1];
 				System.out.println("QUIT: " + otherID);
 
-				for (int i = 0; i < p_index; i++) {
+				for (int i = 0; i < user_index; i++) {
 					if (users[i].getText().equals(otherID)) {
 						users[i].setVisible(false);
 						users[i].setText("");
