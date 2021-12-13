@@ -1,15 +1,11 @@
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
-
 import java.awt.event.*;
 import java.io.*;
 import java.util.Scanner;
 
 public class SignUp extends JFrame {
-
 	private JPanel contentPane;
 	private JTextField txtSignup;
 	private JTextField txtName;
@@ -22,22 +18,16 @@ public class SignUp extends JFrame {
 	private JPasswordField erdpasswordField_1;
 	private boolean idCheck = false;
 
-	/**
-	 * Launch the application.
-	 */
-
-	/**
-	 * Create the frame.
-	 */
 	public SignUp(PrintWriter out, Scanner in) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 620, 420);
 		contentPane = new JPanel();
-		contentPane.setBackground(SystemColor.activeCaption);
+		contentPane.setBackground(Color.LIGHT_GRAY);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
 		txtSignup = new JTextField();
+		txtSignup.setBounds(199, 36, 196, 34);
 		txtSignup.setEditable(false);
 		txtSignup.setBackground(new Color(211, 211, 211));
 		txtSignup.setHorizontalAlignment(SwingConstants.CENTER);
@@ -46,173 +36,119 @@ public class SignUp extends JFrame {
 		txtSignup.setColumns(10);
 
 		txtName = new JTextField();
+		txtName.setBounds(71, 96, 81, 26);
 		txtName.setEditable(false);
 		txtName.setFont(new Font("Microsoft Tai Le", Font.BOLD, 15));
-		txtName.setHorizontalAlignment(SwingConstants.TRAILING);
-		txtName.setText("name:");
+		txtName.setHorizontalAlignment(SwingConstants.CENTER);
+		txtName.setText("name");
 		txtName.setColumns(10);
 
 		txtId = new JTextField();
+		txtId.setBounds(71, 132, 81, 26);
 		txtId.setEditable(false);
 		txtId.setFont(new Font("Microsoft Tai Le", Font.BOLD, 15));
-		txtId.setHorizontalAlignment(SwingConstants.TRAILING);
-		txtId.setText("id:");
+		txtId.setHorizontalAlignment(SwingConstants.CENTER);
+		txtId.setText("id");
 		txtId.setColumns(10);
 
 		txtPw = new JTextField();
+		txtPw.setBounds(72, 171, 80, 26);
 		txtPw.setEditable(false);
 		txtPw.setFont(new Font("Microsoft Tai Le", Font.BOLD, 15));
-		txtPw.setHorizontalAlignment(SwingConstants.TRAILING);
-		txtPw.setText("pw:");
+		txtPw.setHorizontalAlignment(SwingConstants.CENTER);
+		txtPw.setText("password");
 		txtPw.setColumns(10);
 
 		textField = new JTextField();
+		textField.setBounds(164, 99, 296, 21);
 		textField.setColumns(10);
 
 		textField_1 = new JTextField();
+		textField_1.setBounds(164, 135, 296, 21);
 		textField_1.setColumns(10);
 
 		JButton btnIdCheck = new JButton("id check");
+		btnIdCheck.setBounds(472, 131, 101, 29);
 		btnIdCheck.setFont(new Font("Microsoft Tai Le", Font.BOLD, 15));
 
 		txtPwCheck = new JTextField();
+		txtPwCheck.setBounds(72, 212, 80, 26);
 		txtPwCheck.setEditable(false);
 		txtPwCheck.setFont(new Font("Microsoft Tai Le", Font.BOLD, 15));
-		txtPwCheck.setHorizontalAlignment(SwingConstants.TRAILING);
-		txtPwCheck.setText("check:");
+		txtPwCheck.setHorizontalAlignment(SwingConstants.CENTER);
+		txtPwCheck.setText("pwcheck");
 		txtPwCheck.setColumns(10);
 
 		JButton btnFinish = new JButton("Finish");
+		btnFinish.setBounds(125, 289, 101, 29);
 		btnFinish.setFont(new Font("Microsoft Tai Le", Font.BOLD, 15));
 
 		passwordField = new JPasswordField();
+		passwordField.setBounds(164, 174, 296, 21);
 
 		erdpasswordField_1 = new JPasswordField();
+		erdpasswordField_1.setBounds(164, 215, 299, 21);
 
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setBounds(362, 289, 101, 29);
 		btnCancel.setFont(new Font("Microsoft Tai Le", Font.BOLD, 15));
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup().addGap(106).addGroup(gl_contentPane
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-								.addComponent(txtName, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(textField, GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-								.addComponent(txtId, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(txtPwCheck, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-										.addComponent(txtPw, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 59,
-												GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(passwordField, GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-										.addComponent(erdpasswordField_1, GroupLayout.DEFAULT_SIZE, 192,
-												Short.MAX_VALUE)
-										.addGroup(Alignment.TRAILING,
-												gl_contentPane.createSequentialGroup()
-														.addComponent(btnFinish, GroupLayout.PREFERRED_SIZE, 85,
-																GroupLayout.PREFERRED_SIZE)
-														.addGap(27).addComponent(btnCancel).addGap(28)))))
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnIdCheck).addGap(63))
-				.addGroup(Alignment.LEADING,
-						gl_contentPane.createSequentialGroup().addGap(120)
-								.addComponent(txtSignup, GroupLayout.PREFERRED_SIZE, 353, GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(119, Short.MAX_VALUE)));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup().addGap(31)
-				.addComponent(
-						txtSignup, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(26)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txtName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txtId, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnIdCheck))
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txtPw, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txtPwCheck, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(erdpasswordField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(26).addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(btnCancel)
-						.addComponent(btnFinish))
-				.addContainerGap(83, Short.MAX_VALUE)));
-		contentPane.setLayout(gl_contentPane);
-		// guië
+		contentPane.setLayout(null);
+		contentPane.add(btnFinish);
+		contentPane.add(btnCancel);
+		contentPane.add(txtPwCheck);
+		contentPane.add(txtPw);
+		contentPane.add(passwordField);
+		contentPane.add(erdpasswordField_1);
+		contentPane.add(txtId);
+		contentPane.add(txtName);
+		contentPane.add(textField);
+		contentPane.add(textField_1);
+		contentPane.add(btnIdCheck);
+		contentPane.add(txtSignup);
+		// gui³¡
 
-		// idCheckí• ë•Œ
+		// idCheckÇÒ¶§
 		btnIdCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				String id = textField_1.getText();
 				if (id.equals("")) {
-					JOptionPane.showMessageDialog(null, "idë¥¼ ì…ë ¥í•˜ì‹œì˜¤");
+					JOptionPane.showMessageDialog(null, "id¸¦ ÀÔ·ÂÇÏ½Ã¿À");
 				} else {
-					System.out.println("idê°€ëŠ¥í•¨");
-					JOptionPane.showMessageDialog(null, "id ì‚¬ìš©ê°€ëŠ¥í•©ë‹ˆë‹¤");
+					System.out.println("id »ç¿ë°¡´É");
+					JOptionPane.showMessageDialog(null, "id »ç¿ë°¡´É");
 					idCheck = true;
 				} // else close
 
 			}
 		});
 
-		// íšŒì›ê°€ì…ì‹œë„í• ë•Œ-finishë²„íŠ¼ ëˆ„ë¥¼ë•Œ
+		// È¸¿ø°¡ÀÔ½ÃµµÇÒ¶§-finish¹öÆ° ´©¸¦¶§
 		btnFinish.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String name = textField.getText();
 				String id = textField_1.getText();
 				String pw = passwordField.getText();
 				String pwCheck = erdpasswordField_1.getText();
-			
 
-				// nameì— ì•„ë¬´ê²ƒë„ ì…ë ¥í•˜ì§€ ì•Šì•˜ì„ ë•Œ íŒì—…ì°½ë ìš°ê¸°
-				if (name.equals("")) {
-					JOptionPane.showMessageDialog(null, "ì´ë¦„ì„ ì…ë ¥í•˜ì„¸ìš”");
+				if (name.equals("")) { //name¿¡ ¾Æ¹«°Íµµ ÀÓ·ÂÇÏÁö ¾Ê¾ÒÀ» °æ¿ì
+					JOptionPane.showMessageDialog(null, "ÀÌ¸§À» ÀÔ·ÂÇÏ½Ã¿ä");
 				}
-				// idì— ì•„ë¬´ê²ƒë„ ì…ë ¥í•˜ì§€ ì•Šì•˜ì„ ë•Œ íŒì—…ì°½ë ìš°ê¸°
-				else if (id.equals("")) {
-					JOptionPane.showMessageDialog(null, "idë¥¼ ì…ë ¥í•˜ì‹œì˜¤");
+				else if (id.equals("")) { //id¿¡ ¾Æ¹«°Íµµ ÀÔ·ÂÇÏÁö ¾Ê¾ÒÀ» °æ¿ì
+					JOptionPane.showMessageDialog(null, "id¸¦ ÀÔ·ÂÇÏ½Ã¿À");
 				}
-				// idì— ì¡°ê±´ì•ˆë§ì„ë•Œ íŒì—…ì°½ë ìš°ê¸°
-
-				// pwì— ì•„ë¬´ê²ƒë„ ì…ë ¥í•˜ì§€ ì•Šì•˜ì„ ë•Œ íŒì—…ì°½ë ìš°ê¸°
-				else if (pw.equals("")) {
-					JOptionPane.showMessageDialog(null, "pwë¥¼ ì…ë ¥í•˜ì‹œì˜¤");
+				else if (pw.equals("")) { // pw¿¡ ¾Æ¹«°Íµµ ÀÔ·ÂÇÏÁö ¾Ê¾ÒÀ» °æ¿ì
+					JOptionPane.showMessageDialog(null, "pw¸¦ ÀÔ·ÂÇÏ½Ã¿À");
 				}
-
-				// pwCheckì— ì•„ë¬´ê²ƒë„ ì…ë ¥í•˜ì§€ ì•Šì•˜ì„ ë•Œ íŒì—…ì°½ë ìš°ê¸°
-				else if (pwCheck.equals("")) {
-					JOptionPane.showMessageDialog(null, "pwë¥¼ í•œë²ˆë” ì…ë ¥í•˜ì‹œì˜¤");
+				else if (pwCheck.equals("")) { //pwCheck¿¡ ¾Æ¹«°Íµµ ÀÔ·ÂÇÏÁö ¾Ê¾ÒÀ» °æ¿ì
+					JOptionPane.showMessageDialog(null, "pw¸¦ ÇÑ¹ø´õ ÀÔ·ÂÇÏ½Ã¿À");
 				}
-				// pwì™€ pwCheckì´ê°™ì€ì§€ í™•ì¸
-				else if (!pw.equalsIgnoreCase(pwCheck)) {
-					JOptionPane.showMessageDialog(null, "ë¹„ë°€ë²ˆí˜¸ê°€ ë‹¤ë¦…ë‹ˆë‹¤");
+				else if (!pw.equalsIgnoreCase(pwCheck)) { //password¿Í pwCheckÀÌ µ¿ÀÏÇÑÁö È®ÀÎ
+					JOptionPane.showMessageDialog(null, "ºñ¹Ğ¹øÈ£°¡ ´Ù¸¨´Ï´Ù");
 				}
-				// idcheckí–ˆëŠ”ì§€ì—¬ë¶€í™•ì¸
-				else if (idCheck == false) {
-					JOptionPane.showMessageDialog(null, "ID Checkë¥¼ í•˜ì‹­ì‹œì˜¤");
+				else if (idCheck == false) { //idcheck Å¬¸¯ ¿©ºÎ
+					JOptionPane.showMessageDialog(null, "ID Check¸¦ ÇÏ½Ê½Ã¿À");
 				}
-
-				// pw hashí•¨ìˆ˜ì ìš©í•´ì„œì €ì¥í•˜ê¸°
-				// ëª¨ë“ ì¡°ê±´ì´ë§ì„ë•Œ-íšŒì›ê°€ì…ì„±ê³µ
 				else {
 
 					System.out.println("AAAAAAAAAAAAAAAA");
@@ -221,10 +157,8 @@ public class SignUp extends JFrame {
 					out.println("signUp&success&id&" + id);
 					out.println("signUp&success&pw&" + pw);
 
-					// ì„±ê³µì‹œíŒì—…ì°½ë„ìš°ê¸°
-					System.out.println("íšŒì›ê°€ì…ì™„ë£Œ");
-					// ë¡œê·¸ì¸í™”ë©´ìœ¼ë¡œì´ë™í•˜ê¸°
-					JOptionPane.showMessageDialog(null, "íšŒì›ê°€ì… ì„±ê³µ!\n ì¬ì ‘ì† í›„ ë¡œê·¸ì¸ì´ ê°€ëŠ¥í•©ë‹ˆë‹¤.\n [í™•ì¸]ì„ ëˆ„ë¥´ì‹œë©´ ì¢…ë£Œë©ë‹ˆë‹¤.");
+					System.out.println("È¸¿ø°¡ÀÔ¿Ï·á");
+					JOptionPane.showMessageDialog(null, "È¸¿ø°¡ÀÔ ¼º°ø!\n ÀçÁ¢¼Ó ÈÄ ·Î±×ÀÎÀÌ °¡´ÉÇÕ´Ï´Ù.\n [È®ÀÎ]À» ´©¸£½Ã¸é Á¾·áµË´Ï´Ù.");
 					System.exit(0);
 					SignUp.this.setVisible(false);
 
@@ -238,21 +172,18 @@ public class SignUp extends JFrame {
 
 				}
 
-				// ì´ˆê¸°í™”í•˜ê¸°
-				textField.setText("");
-				textField_1.setText("");
-				passwordField.setText("");
-				erdpasswordField_1.setText("");
+				textField.setText(""); //ÃÊ±âÈ­
+				textField_1.setText(""); //ÃÊ±âÈ­
+				passwordField.setText(""); //ÃÊ±âÈ­
+				erdpasswordField_1.setText(""); //ÃÊ±âÈ­
 
 			}
 		});
 
-		// íšŒì›ê°€ì…ì·¨ì†Œí• ë•Œ-Cancelë²„íŠ¼ ëˆ„ë¥¼ë•Œ
-		btnCancel.addActionListener(new ActionListener() {
+		btnCancel.addActionListener(new ActionListener() { //cancel ¹öÆ° ´©¸¦ °æ¿ì
 			public void actionPerformed(ActionEvent e) {
 				SignUp.this.setVisible(false);
-				GamePlayer.frame.setVisible(true);
-				// ë‹¤ì‹œë¡œê·¸ì¸ì°½ìœ¼ë¡œ ëŒì•„ê°€ê¸°
+				GamePlayer.frame.setVisible(true); //·Î±×ÀÎ Ã¢ µ¹¾Æ°¡±â
 			}
 		});
 	}
