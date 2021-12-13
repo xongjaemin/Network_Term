@@ -1,10 +1,8 @@
-import java.io.BufferedWriter;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -26,201 +24,55 @@ class Global{
 	static String currentString = "";
 	static int turnCount = 0;
 }
-//792 591
-public class GameServer {
-   // Personë“¤ì˜ ì •ë³´ë¥¼ ì €ì¥í•  Set (íŒŒì¼ì—ì„œ ì½ì–´ì˜¬ ê²ƒ. ëª¨ë‘ ì½ì–´ì˜¤ê³  ì„œë²„ëŠ” readyê°€ ëœë‹¤.)
-   public static Set<Person> players = new HashSet<>();
-   // íŒŒì¼ì˜ ì´ë¦„.
-   public static String fileName = "person.txt";
-   // ë¡œê·¸ì¸ ëœ idì˜ ì •ë³´ë¥¼ ì €ì¥í•  Set (íŒŒì¼ì—ì„œ ì½ì–´ì˜¬ ê²ƒ. ëª¨ë‘ ì½ì–´ì˜¤ê³  ì„œë²„ëŠ” readyê°€ ëœë‹¤.)
-   public static Set<String> ids = new HashSet<>();
-   // pwì˜ ì •ë³´ë¥¼ ì €ì¥í•  Set (íŒŒì¼ì—ì„œ ì½ì–´ì˜¬ ê²ƒ. ëª¨ë‘ ì½ì–´ì˜¤ê³  ì„œë²„ëŠ” readyê°€ ëœë‹¤.)
-   public static Set<String> pws = new HashSet<>();
-   // ì±„íŒ…ì—ì„œ ì‚¬ìš©í•  ids
-   public static Set<String> ids_chat = new HashSet<>();
-   // speakerì™€ person_idë¥¼ ë¬¶ì–´ ì¤Œ.(key : print writer / value : name)
-   public static HashMap<PrintWriter, String> writers = new HashMap<PrintWriter, String>();
-   // ì•”í˜¸í™”
-   private static Encoder encoder = Base64.getEncoder();
 
-   // readyë¥¼ ëˆ„ë¥¸ ì‚¬ëŒì˜ ìˆ˜.(2ê°€ë˜ë©´ ê²Œì„ì‹œì‘.)
-   public static int ready = 0;
+public class GameServer {
+   public static Set<Person> players = new HashSet<>(); //UserµéÀÇ Á¤º¸¸¦ ÀúÀåÇÒ Set, file¿¡¼­ ÀĞ¾î ¿È
+   public static String fileName = "person.txt"; //data¸¦ ºÒ·¯¿Ã fileÀÇ ÀÌ¸§
+   public static Set<String> ids = new HashSet<>(); //·Î±×ÀÎ ÇÑ idÀÇ Á¤º¸¸¦ ÀúÀåÇÒ Set, file¿¡¼­ ÀĞ¾î ¿È
+   public static Set<String> pws = new HashSet<>(); //pwÀÇ Á¤º¸¸¦ ÀúÀåÇÒ Set, file¿¡¼­ ÀĞ¾î ¿È
+   public static Set<String> ids_chat = new HashSet<>(); //Ã¤ÆÃ¿¡¼­ »ç¿ëÇÒ ids_chat
+   public static HashMap<PrintWriter, String> writers = new HashMap<PrintWriter, String>(); //speaker¿Í person_id¸¦ ¹­À½(key: printwriter, value: name)
+   private static Encoder encoder = Base64.getEncoder(); //base64·Î ¾ÏÈ£È­ÇÏ±â À§ÇÑ ÄÚµå
    
+   public static int ready = 0; // ready¸¦ ´©¸¥ »ç¶÷ÀÇ ¼ö(2°¡µÇ¸é °ÔÀÓ½ÃÀÛ)
    
    @SuppressWarnings("resource")
-   public static void main(String[] args) throws Exception {
-      // íŒŒì¼ì— ì ‘ê·¼í•´ì„œ ì½ì–´ì˜¬ stream ìƒì„±.
-	   
-      ObjectInputStream inputStream = null;
-      /*
-      BufferedWriter file = new BufferedWriter(new FileWriter(fileName));
-      file.close();
-      */
+   public static void main(String[] args) throws Exception {  
+      ObjectInputStream inputStream = null; //fileÀ» ÀĞ¾î¿Ã stream »ı¼º
       try {
-         // inputStream ìƒì„±.
-         inputStream = new ObjectInputStream(new FileInputStream(new File(GameServer.fileName)));
+         inputStream = new ObjectInputStream(new FileInputStream(new File(GameServer.fileName))); // inputStream »ı¼º
       } catch (EOFException e) {
-         // nothing
       }
 
-      // Person ì½ì–´ì„œ ì„ì‹œ ì €ì¥í•  ê°ì²´ ìƒì„±.
-      Person reader = null;
-      try {
-         // ëª¨ë“  Person ì½ì–´ì˜¤ê¸°.(ê°’ì´ ì—†ì„ ë•Œ ê¹Œì§€)
-         while ((reader = (Person) inputStream.readObject()) != null) {
-            // playersì— Person ì „ì²´ ì •ë³´ ì¶”ê°€.
-            players.add(reader);
-            // ì•”í˜¸í™”í•˜ê¸°
-            //byte[] targetBytes = reader.getPw().getBytes();
-            //byte[] encodedBytes = encoder.encode(targetBytes);
-            //String password = new String(encodedBytes);
+      Person reader = null; //Person ÀĞ¾î¿Í¼­ ÀÓ½Ã ÀúÀåÇÒ °´Ã¼
+      try {      
+         while ((reader = (Person) inputStream.readObject()) != null) { //¸ğµç Person ´õ ÀÌ»ó °ªÀÌ ¾øÀ» ¶§ °¡Áö ÀĞ¾î¿À±â          
+            players.add(reader); // players¿¡ Person ÀüÃ¼ Á¤º¸ Ãß°¡            
             pws.add(reader.getPw());
          }
       } catch (Exception e) {
-         // nothing to do
       }
 
-      // ready
-      System.out.println("COMPLETE : READ INFO FROM FILE.");
-      System.out.println("Server Ready!");
-      System.out.println("Help? -> \\?");
+      System.out.println("CREAD INFORMATION FROM FILE COMPLETE.");
+      System.out.println("Server Success");
 
-      // thread to command
       new Thread(new Runnable() {
          public void run() {
             Scanner sc = new Scanner(System.in);
             String str;
-            while (true) {
-               str = sc.nextLine();
-               // help
-               if (str.equalsIgnoreCase("/help") || str.equalsIgnoreCase("/?")) {
-                  System.out.println("==============================");
-                  System.out.println("/show : show registered players");
-                  System.out.println("/stop : stop server & save information");
-                  System.out.println("/state : online | in chat | on game");
-                  System.out.println("/add Name Id PW : add new player");
-                  System.out.println("==============================");
-               }
-
-               // ì˜¨ë¼ì¸ì¸ ì‚¬ëŒ, ì±„íŒ…ì°½ì— ìˆëŠ” ì‚¬ëŒ, ê²Œì„ëª¨ë“œì¸ ì‚¬ëŒì„ ê°ê° ë³´ì—¬ì¤€ë‹¤.
-               if (str.equalsIgnoreCase("/state")) {
-                  System.out.println("============ONLINE============");
-                  for (String p : ids) {
-                     if (p.equalsIgnoreCase(""))
-                        continue;
-                     System.out.println("Person Id: " + p);
-                  }
-                  System.out.println("============INCHAT============");
-                  for (String p : ids_chat) {
-                     if (p.equalsIgnoreCase(""))
-                        continue;
-                     System.out.println("Person Id: " + p);
-                  }
-                  System.out.println("============INGAME============");
-                  for (String p : ids) {
-                     if (p.equalsIgnoreCase(""))
-                        continue;
-                     else {
-                        if (!ids_chat.contains(p)) {
-                           System.out.println("Person Id: " + p);
-                        }
-                     }
-                  }
-                  System.out.println("==============================");
-               }
-
-               // í˜„ì¬ ì €ì¥ë˜ì–´ìˆëŠ” personë“¤ ë³´ì—¬ì£¼ê¸°
-               if (str.equalsIgnoreCase("/show")) {
-                  System.out.println("===========DATABASE===========");
-                  for (Person p : players) {
-                     System.out.println("Person : " + p);
-                  }
-                  System.out.println("==============================");
-               }
-               
-               
-            
-               // ì €ì¥í•˜ê³  ì¢…ë£Œí•˜ê¸°
-               if (str.equalsIgnoreCase("/stop")) {
-                  ObjectOutputStream outputStream = null;
-                  try {
-                     // íŒŒì¼ì— ì €ì¥í•  outputStream ìƒì„±.
-                     outputStream = new ObjectOutputStream(new FileOutputStream(new File(GameServer.fileName)));
-                     // playersì— ì €ì¥ëœ ëª¨ë“  Person ì •ë³´ ì €ì¥.
-                     for (Person p : players) {
-                        outputStream.writeObject(p);
-                     }
-                     // ì™„ë£Œ í™•ì¸.
-                     System.out.println("==============================");
-                     System.out.println("SAVE COMPLETE.");
-                     System.out.println("==============================");
-                     // ì¢…ë£Œ.
-                     System.exit(0);
-                  } catch (FileNotFoundException e) {
-                     e.printStackTrace();
-                  } catch (IOException e) {
-                     e.printStackTrace();
-                  } finally {
-                     try {
-                        // stream close.
-                        outputStream.close();
-                     } catch (IOException e) {
-                        e.printStackTrace();
-                     }
-                  }
-               }
-  
-              
-               
-               if(str.toLowerCase().startsWith("/add")) {
-                  String[] splitmessage = str.split(" ");
-                  Person newUser = new Person("","","",0,0);
-                  newUser.setName(splitmessage[1]);
-                  int exist = 0;
-                  for (Person p : players) {
-                     // íšŒì›ê°€ì…í•˜ë ¤ëŠ” idê°€ ì´ë¯¸ ì¡´ì¬í•˜ëŠ” idì¼ë•Œ
-                     if (p.getId().contains(splitmessage[2])) {
-                        // ì¡´ì¬í•˜ëŠ”ê±° ì•Œë ¤ì£¼ê¸°
-                        System.out.println("This ID already registered");
-                        exist = 1;
-                        break;
-                     }
-                  }
-                  if(exist == 0)
-                     newUser.setId(splitmessage[2]);
-                  else
-                     continue;
-                  
-                  byte[] targetBytes = splitmessage[3].getBytes();
-                  byte[] encodedBytes = encoder.encode(targetBytes);
-                  String password = new String(encodedBytes);
-                  newUser.setPw(password);
-                  pws.add(newUser.getPw());
-                  System.out.println(newUser.getName() + " " + newUser.getId() + " ");
-                  players.add(newUser);
-               }
-
-            }
-
          }
       }).start();
 
-      // Thread 500ê°œ ìƒì„±.
-      ExecutorService pool = Executors.newFixedThreadPool(500);// thread 500ê°œ ìƒì„±
-      // serverSocket ìƒì„±(port number : 59001)
-      try (ServerSocket listener = new ServerSocket(59001)) {
-         // ê³„ì† ë°›ëŠ”ë‹¤.
-         while (true) {
-            // clientì—ì„œ ì—°ê²° ìš”ì²­ì´ ì˜¤ë©´,
-            pool.execute(new Handler(listener.accept())); // ì„œë²„ë§ˆë‹¤ ì†Œì¼“ì„¤ì •í•´ì£¼ê¸° with thread
+      ExecutorService pool = Executors.newFixedThreadPool(500);//thread 500°³ »ı¼º     
+      try (ServerSocket listener = new ServerSocket(59001)) { //serverSocket »ı¼º
+         while (true) {           
+            pool.execute(new Handler(listener.accept())); //client¿¡¼­ connect ¿äÃ»ÀÌ ¿Ã °æ¿ì, ¼­¹ö¸¶´Ù setting socket with thread
          }
-
       }
-
-   } // main close.
+   }
 
    private static class Handler implements Runnable {
-      private String id; // clientì˜ idë¥¼ ì €ì¥í•  String
+      private String id; // clientÀÇ id¸¦ ÀúÀåÇÒ String
       private Socket socket; // socket
       private Scanner in; // text receiver from Client
       private PrintWriter out; // text sender to Client
@@ -232,140 +84,92 @@ public class GameServer {
       }
 
       public void run() {
-         try { // login ë°›ì„ ê²ƒ ë§Œë“¤ê¸°.
-
-            in = new Scanner(socket.getInputStream()); // Clientì—ê²Œ ë°›ì„ stream
-            out = new PrintWriter(socket.getOutputStream(), true); // Clientì—ê²Œ ë³´ë‚¼ stream
+         try {
+            in = new Scanner(socket.getInputStream()); //client¿¡°Ô ¹ŞÀ» stream
+            out = new PrintWriter(socket.getOutputStream(), true); //client¿¡°Ô º¸³¾ stream
             user = new Person("", "", "", 0, 0);
 
-            // check
             System.out.println("Connected: " + socket);
 
-            // ë°›ì€ ë©”ì„¸ì§€ê°€ ìˆë‹¤ë©´,
-            while (in.hasNext()) {
-               // ë¬¸ì¥ ë°›ì•„ì˜¤ê¸°
-               String str = in.nextLine();
+            while (in.hasNext()) { //µé¾î¿Â message°¡ ÀÖ´Ù¸é
+               String str = in.nextLine(); //string ¹Ş¾Æ¿À±â
+               String[] splitMessage = str.split("&"); //¹ŞÀº ¹®Àå '&'·Î ³ª´©±â
 
-               // ë°›ì€ ë¬¸ì¥ '&'ë¡œ ë‚˜ëˆ„ê¸°
-               String[] splitMessage = str.split("&");
-
-               // check
-               // for (int i = 0; i < splitMessage.length; i++) {
-               // System.out.println("ACK: " + splitMessage[i]);
-               // }
-
-               // loginì„í•˜ë ¤í• ë•Œ
-               if (splitMessage[0].toLowerCase().startsWith("login")) {
-
-                  // idë¶€ë¶„
-                  if (splitMessage[2].equalsIgnoreCase("id")) {
-                     // playersì—ìˆëŠ”ì§€í™•ì¸
+               if (splitMessage[0].toLowerCase().startsWith("login")) { //login ÇÒ °æ¿ì
+                  if (splitMessage[2].equalsIgnoreCase("id")) { //id part
                      int exist = 0;
-                     for (Person p : players) {
+                     for (Person p : players) { //players¿¡ ÀÖ´ÂÁö È®ÀÎ
                         if (p.getId().contains(splitMessage[3])) {
-                           // ì¡´ì¬í•œë‹¤ë©´OKë³´ë‚´ê¸°
-                           System.out.println("idOK");
+                           System.out.println("idOK"); //Á¸ÀçÇÑ´Ù¸é OK Ãâ·Â
                            out.println("login&id&OK");
                            user.setId(splitMessage[3]);
                            exist = 1;
                            break;
                         }
                      }
-
-                     // ì¡´ì¬í•˜ì§€ì•Šìœ¼ë©´ERRORë³´ë‚´ê¸°
-                     if (exist == 0) {
-                        System.out.println("idERROR");
+                     
+                     if (exist == 0) { //Á¸ÀçÇÏÁö ¾ÊÀ¸¸é
+                        System.out.println("idERROR"); //ERROR Ãâ·Â
                         out.println("login&id&ERROR");
                      }
 
                   }
 
-                  // pwë¶€ë¶„
-                  else if (splitMessage[2].equalsIgnoreCase("pw")) {
-                     // pwsì—ìˆëŠ”ì§€í™•ì¸
-
-                     // encodingí•˜ê¸°
-                     byte[] targetBytes = splitMessage[3].getBytes();
-                     byte[] encodedBytes = encoder.encode(targetBytes);
-                     String pw = new String(encodedBytes);
-                     //System.out.println(pw);
-                     if (pws.contains(pw)) {
-                        // ì¡´ì¬í•œë‹¤ë©´OKë³´ë‚´ê¸°
-                        System.out.println("pwOK");
+                  else if (splitMessage[2].equalsIgnoreCase("pw")) { //pw part
+                     byte[] targetBytes = splitMessage[3].getBytes(); //password base64·Î ¾ÏÈ£È­ÇÏ±â
+                     byte[] encodedBytes = encoder.encode(targetBytes); //password base64·Î ¾ÏÈ£È­ÇÏ±â
+                     String pw = new String(encodedBytes); //password base64·Î ¾ÏÈ£È­ÇÏ±â
+                     if (pws.contains(pw)) { //password°¡ Á¸ÀçÇÒ °æ¿ì
+                        System.out.println("pwOK"); //OK Ãâ·Â
                         out.println("login&pw&OK");
-
+                        
                         ids.add(user.getId());
 
-                        /**/
                         for (Person p : players) {
                            if (p.getId().contentEquals(user.getId())) {
                               user = p;
                               id = user.getId();
                            }
                         }
-                        /**/
-                        
-                        //ì ‘ì†ë‚ ì§œ ì´ˆê¸°í™”.
-                        SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat ( "yyyy.MM.dd HH:mm:ss");
+                        SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat ( "yyyy.MM.dd HH:mm:ss"); //Á¢¼Ó ³¯Â¥ ÃÊ±âÈ­
                         Date currentTime = new Date ();
                         String mTime = mSimpleDateFormat.format ( currentTime );
-                        //System.out.println ( mTime );
                         user.setInTime(mTime);
                      }
-                     // ì¡´ì¬í•˜ì§€ì•Šìœ¼ë©´ERRORë³´ë‚´ê¸°
-                     else {
-                        out.println("login&pw&ERROR");
+                     else { //Á¸ÀçÇÏÁö ¾Ê´Â´Ù¸é
+                        out.println("login&pw&ERROR"); //ERROR Ãâ·Â
                      }
                   }
 
-                  // ë¡œê·¸ì¸í•˜ëŠ” ì‚¬ëŒì˜ ì •ë³´ë¥¼ ê°€ì ¸ì˜¬ ë•Œ, login & getPersonInfo & [id]
-                  if (splitMessage[1].equalsIgnoreCase("getpersoninfo")) {
-                     // System.out.println("ë°›ì•˜ìŒ");
-                     for (Person p : players) { // ëª¨ë“  í”Œë ˆì´ì–´ë“¤ ì¤‘ì—,
-                        if (p.getId().equals(splitMessage[2])) { /// ê·¸ ì‚¬ëŒì´ ìˆìœ¼ë©´, (ìˆì–´ì•¼ ì •ìƒì„)
-                           // USERINFO & [name] & [id] & [pw] & [win] & [lose]ë¡œ ë³´ë‚¸ë‹¤.
-                           out.println("userinfo&" + p.getName() + "&" + p.getId() + "&" + p.getPw() + "&"
-                                 + p.getWin() + "&" + p.getLose());
+                  if (splitMessage[1].equalsIgnoreCase("getpersoninfo")) { //·Î±×ÀÎÇÏ´Â À¯ÀúÀÇ Á¤º¸¸¦ °¡Á®¿Ã °æ¿ì
+                     for (Person p : players) { //¸ğµç ÇÃ·¹ÀÌ¾îµé È®ÀÎ
+                        if (p.getId().equals(splitMessage[2])) { //±× À¯Àú°¡ ÀÖÀ» °æ¿ì       
+                           out.println("userinfo&" + p.getName() + "&" + p.getId() + "&" + p.getPw() + "&" + p.getWin() + "&" + p.getLose());
                            break;
                         }
                      }
                   }
                }
 
-               // íšŒì›ê°€ì…ë¶€ë¶„
-               // 'signup'ìœ¼ë¡œì‹œì‘í•˜ë©´
-               if (splitMessage[0].toLowerCase().startsWith("signup")) {
-                  // idì²´í¬ë²„íŠ¼ ëˆŒë €ì„ ë•Œ ë™ì‘
-                  if (splitMessage[1].toLowerCase().startsWith("idcheck")) {
+               if (splitMessage[0].toLowerCase().startsWith("signup")) { //signupÀ¸·Î ½ÃÀÛÇÒ °æ¿ì
+                  if (splitMessage[1].toLowerCase().startsWith("idcheck")) { //idcheck ¹öÆ° ´­·ÈÀ» °æ¿ì
                      int exist = 0;
-                     for (Person p : players) {
-                        // íšŒì›ê°€ì…í•˜ë ¤ëŠ” idê°€ ì´ë¯¸ ì¡´ì¬í•˜ëŠ” idì¼ë•Œ
-                        if (p.getId().contains(splitMessage[2])) {
-                           // ì¡´ì¬í•˜ëŠ”ê±° ì•Œë ¤ì£¼ê¸°
-                           System.out.println("idì´ë¯¸ìˆìŒ");
+                     for (Person p : players) {                      
+                        if (p.getId().contains(splitMessage[2])) { // È¸¿ø°¡ÀÔÇÏ·Á´Â id°¡ ÀÌ¹Ì Á¸ÀçÇÏ´Â idÀÏ °æ¿ì
+                           System.out.println("idÀÌ¹ÌÀÖÀ½"); //Á¸ÀçÇÑ´Ù°í ¾Ë·ÁÁÖ±â
                            out.println("signUp&id&Exists");
                            exist = 1;
                            break;
                         }
                      }
 
-                     // idì‚¬ìš©ê°€ëŠ¥í• ë•Œ
-                     if (exist == 0) {
-                        System.out.println("idë¡œì„¤ì •ê°€ëŠ¥");
+                     if (exist == 0) { //È¸¿ø°¡ÀÔÇÏ·Á´Â id°¡ »ç¿ë°¡´ÉÇÒ °æ¿ì
+                        System.out.println("id·Î¼³Á¤°¡´É"); //»ç¿ë °¡´É ¿©ºÎ Ãâ·Â
                         out.println("signUp&id&OK");
                      }
                   }
 
-                  
-                  
-                  
-                  
-                  
-                  
-                  // íšŒì›ê°€ì…ì„±ê³µí–ˆì„ë•Œì •ë³´ì €ì¥
                   else if (splitMessage[1].toLowerCase().startsWith("success")) {
-                     // nameì €ì¥
-                	  
                 	  ObjectOutputStream outputStream = null;
                       Person newUser = new Person("","","",0,0);
           
@@ -378,14 +182,13 @@ public class GameServer {
                           user.setId(splitMessage[3]);
                           newUser.setId(splitMessage[3]);
                        }
-                       // pwì €ì¥
                        else if (splitMessage[2].equalsIgnoreCase("pw")) {
                           byte[] targetBytes = splitMessage[3].getBytes();
                           byte[] encodedBytes = encoder.encode(targetBytes);
                           String password = new String(encodedBytes);
                           user.setPw(password);
                           newUser.setPw(password);
-                          pws.add(newUser.getPw()); //ì´ê±´ ì‚­ì œí•´ì•¼í• ìˆ˜ë„ ìˆìŒ
+                          pws.add(newUser.getPw());
                           out.println("signUp&complete");
                        }
 
@@ -393,10 +196,8 @@ public class GameServer {
                 	  
                       
                       try {
-                         // íŒŒì¼ì— ì €ì¥í•  outputStream ìƒì„±.
-                         outputStream = new ObjectOutputStream(new FileOutputStream(new File(GameServer.fileName)));
-                         // playersì— ì €ì¥ëœ ëª¨ë“  Person ì •ë³´ ì €ì¥.
-                         for (Person p : players) {
+                         outputStream = new ObjectOutputStream(new FileOutputStream(new File(GameServer.fileName))); //file¿¡ ÀúÀåÇÒ outputStream
+                         for (Person p : players) { //players¿¡ ÀúÀåµÈ ¸ğµç Person Á¤º¸ ÀúÀå
                             outputStream.writeObject(p);
                          }
                       } catch (FileNotFoundException e) {
@@ -405,51 +206,22 @@ public class GameServer {
                          e.printStackTrace();
                       } finally {
                          try {
-                            // stream close.
                             outputStream.close();
                          } catch (IOException e) {
                             e.printStackTrace();
                          }
                       }
-                	                    
-                     
-                     // idì €ì¥
-                     
-                     // ì´ìƒí•œëª…ë ¹ ë“±ì¥í•œê²½ìš°
-                     // else {
-                     // System.out.println("Error");
-                     // }
-
-                     // íšŒì›ê°€ì…ì— ì„±ê³µí•œ ì •ë³´ë¥¼ ì €ì¥í•˜ê¸°
+                	                   
                      if (user.getId() != "" && user.getPw() != "" && user.getName() != "") {
                         players.add(user);
                         id = user.getId();
-                        // System.out.println(user.getId() + " check");
-
                      }
-
-                     // encodingí•˜ê¸°
-                     //byte[] targetBytes = user.getPw().getBytes();
-                     //byte[] encodedBytes = encoder.encode(targetBytes);
-                     //String password = new String(encodedBytes);
-                     // System.out.println(password);
                      pws.add(user.getPw());
-
                   }
-                  // ì´ìƒí•œëª…ë ¹ ë“±ì¥í•œê²½ìš°
-                  // else {
-                  // System.out.println("Error");
-                  // }
-
                }
-					// ê²Œì„ìœ¼ë¡œ ê°„ë‹¤ëŠ” ìš”ì²­ì´ ì˜¤ë©´,
-					if (splitMessage[0].toLowerCase().startsWith("gotogame")) {
-						// System.out.println("ACK: " + splitMessage[1]);
-						// ids_chatì—ì„œ ê·¸ ì•„ì´ ë¹¼ì£¼ê³  (í•˜ë©´ ì•ˆë¼)
+					if (splitMessage[0].toLowerCase().startsWith("gotogame")) { //gotogameÀ¸·Î ½ÃÀÛÇÏ´Â ¿äÃ»ÀÌ ¿Ã °æ¿ì
 						ids_chat.remove(splitMessage[1]);
-						// ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ë“¤ì—ê²Œ
 						for (PrintWriter writer : writers.keySet()) {
-							// ì–˜ ë¹ ì¡Œì–´! ì•Œë ¤ì£¼ê¸°
 							writer.println("GOTOGAME&" + splitMessage[1]);
 						}
 						System.out.println(splitMessage[1] + "is gone into game!");
@@ -459,12 +231,8 @@ public class GameServer {
 
 						if (splitMessage.length < 2)
 							continue;
-						// ë‘ ë²ˆì§¸ ë©”ì„¸ì§€ê°€ startë¼ë©´,
 						if (splitMessage[1].toLowerCase().startsWith("start")) {
-
-							/// chatting ë°©ì— ë“¤ì–´ì™”ì„ ë•Œ
 							ids_chat.add(id);
-							// System.out.println("SERVER NEW ID: " + id);
 							for (String id : ids_chat) {
 								if (id.contentEquals(user.getId()))
 									continue;
@@ -472,24 +240,19 @@ public class GameServer {
 							}
 							for (PrintWriter writer : writers.keySet()) {
 								String ID = writers.get(writer);
-								if (!ids_chat.contains(ID)) { // ***ids_chatì•ˆì— ì´ writerë¥¼ ì“°ëŠ” ì‚¬ëŒì´ ìˆë‹¤ë©´, ***
+								if (!ids_chat.contains(ID)) {
 									continue;
 								}
 								writer.println("MESSAGE " + id + " has joined");
 								writer.println("SETPLAYER " + id);
 							}
-							// writers hash mapì— ì´ clientì˜ writerì •ë³´ë¥¼ ë„£ì–´ì¤€ë‹¤.
 							if (!writers.containsValue(id)) {
 								writers.put(out, id);
 							}
-							// check
-							// System.out.println("ID : " + user.getId() + " NAME : " + user.getName());
-
 						}
 
 						
 						else if (splitMessage[1].toLowerCase().startsWith("getreco")) {
-							// inputì„ " "ë‹¨ìœ„ë¡œ ìª¼ê° ë‹¤.
 							String[] st = splitMessage[1].split(" ");
 							String s_id = st[1];
 							System.out.println(id + " read " + s_id + "'s records");
@@ -505,11 +268,8 @@ public class GameServer {
 						}
 						
 						else if (splitMessage[1].toLowerCase().startsWith("rqgame")) {
-							// inputì„ ë„ì–´ì“°ê¸°ë¥¼ ê¸°ì¤€ìœ¼ë¡œ splití•œë‹¤.
 							String st[] = splitMessage[1].split(" ");
-							// ìƒëŒ€ë°©ì˜ nicknameì„ s_idì— ì €ì¥í•œë‹¤.
-							String s_id = st[1];
-							// check message
+							String s_id = st[1]; //»ó´ëÀÇ nicknameÀ» s_id¿¡ ÀúÀå
 							System.out.println(id + " requests game to " + s_id);
 
 							for (PrintWriter writer : writers.keySet()) {
@@ -522,10 +282,8 @@ public class GameServer {
 						}
 
 						else if (splitMessage[1].toLowerCase().startsWith("replyto")) {
-							// inputì„ ë„ì–´ì“°ê¸°ë¥¼ ê¸°ì¤€ìœ¼ë¡œ splití•œë‹¤.
 							String st[] = splitMessage[1].split(" ");
-							// ìƒëŒ€ë°©ì˜ nicknameì„ s_idì— ì €ì¥í•œë‹¤.
-							String s_id = st[1];
+							String s_id = st[1]; //»ó´ëÀÇ nicknameÀ» s_id¿¡ ÀúÀå
 
 							for (PrintWriter writer : writers.keySet()) {
 								if (s_id.contentEquals(writers.get(writer))) {
@@ -541,37 +299,30 @@ public class GameServer {
 							}
 						}
 
-						// logoutì´ë©´,
-						else if (splitMessage[1].toLowerCase().startsWith("/logout")) {
+						else if (splitMessage[1].toLowerCase().startsWith("/logout")) { //logoutÇÒ °æ¿ì
 							return;
 						}
 
 						else {
 							for (PrintWriter writer : writers.keySet()) {
 								writer.println("MESSAGE " + id + ": " + splitMessage[1]);
-							} // close for
-						} // close else
+							}
+						} 
 					}
 
-					// gameìœ¼ë¡œ ì‹œì‘í•˜ëŠ” ë¬¸ì¥ì´ë¼ë©´,(ê²Œì„ê´€ë ¨)
-					else if (splitMessage[0].equalsIgnoreCase("game")) {
-
-						// readyë¼ë©´!
-						if (splitMessage[3].equalsIgnoreCase("ready")) {
-							// ready ì‹œí‚¨ê±° ë³´ì—¬ì£¼ê¸°.
-							for (PrintWriter writer : writers.keySet()) { // receiverì— ëŒ€í•œ writerì°¾ê³ ,
-								if (splitMessage[2].contentEquals(writers.get(writer))) {
+					else if (splitMessage[0].equalsIgnoreCase("game")) { //gameÀ¸·Î ½ÃÀÛÇÏ´Â ¹®ÀåÀÏ °æ¿ì
+						if (splitMessage[3].equalsIgnoreCase("ready")) { //ready·Î ½ÃÀÛÇÏ´Â ¹®ÀåÀÏ °æ¿ì
+							for (PrintWriter writer : writers.keySet()) { 
+								if (splitMessage[2].contentEquals(writers.get(writer))) { //receiver¿¡ ´ëÇÑ writer Ã£±â
 									writer.println("READY&" + splitMessage[1]);
 									ready++;
 									System.out.println("READY = " + ready);
 									break;
 								}
 							}
-							// ë‘˜ ë‹¤ readyì¸ì§€ í™•ì¸.
-							if (ready == 2) {
-								ready = 0; // init
-								// ê²Œì„ ì‹œì‘! í•˜ë¼ê³  ë‘˜ì—ê²Œ ëª…ë ¹!
-								System.out.println("Game Start!");
+							if (ready == 2) { //user µÑ´Ù readyÀÏ °æ¿ì
+								ready = 0;
+								System.out.println("Game Start!"); //°ÔÀÓ ½ÃÀÛ
 								for (PrintWriter writer : writers.keySet()) {
 									if (splitMessage[1].contentEquals(writers.get(writer))) {
 										writer.println(
@@ -582,16 +333,12 @@ public class GameServer {
 										writer.println(
 												"GAMESTART&" + splitMessage[1] + "&" + splitMessage[2]);
 									}
-
 								}
-
 							}
 						}
-
-						// ready í‘¼ê±°ë¼ë©´!
-						else if (splitMessage[3].equalsIgnoreCase("cancel")) {
-							// ready í’€ë¦°ê±° ë³´ì—¬ì£¼ê¸°.
-							for (PrintWriter writer : writers.keySet()) { // receiverì— ëŒ€í•œ writerì°¾ê³ ,
+						
+						else if (splitMessage[3].equalsIgnoreCase("cancel")) { //ready¸¦ cancelÇÑ °æ¿ì
+							for (PrintWriter writer : writers.keySet()) { //receiver¿¡ ´ëÇÑ writerÃ£±â
 								if (splitMessage[2].contentEquals(writers.get(writer))) {
 									writer.println("CANCEL&" + splitMessage[1]);
 									ready--;
@@ -600,32 +347,22 @@ public class GameServer {
 							}
 						}
 
-						// Game & [sender] & [receiver] & Message & contents
 						else if (splitMessage[3].equalsIgnoreCase("message")) {
-							// splitMessage[4] (ë©”ì„¸ì§€ ë‚´ìš©)ì„ id2ì—ê²Œ ë³´ë‚´ì£¼ê¸°.
 							for (PrintWriter writer : writers.keySet()) {
 								if (splitMessage[2].contentEquals(writers.get(writer))) {
-									// Message & [sender] & content
 									writer.println("MESSAGE&" + splitMessage[1] + "&" + splitMessage[4]);
-									// System.out.println("SENT!");
 									break;
 								}
 							}
 						}
 
-						// Game & [sender] & [receiver] & showInfo
 						else if (splitMessage[3].equalsIgnoreCase("showinfo")) {
-							// senderì—ê²Œ ìƒëŒ€ì •ë³´ ë³´ë‚´ì£¼ê¸°.
 							for (Person r_user : players) {
 								if (splitMessage[2].contentEquals(r_user.getId())) {
-									String records = "READRECO&" + r_user.getId() + "&" + r_user.getWin() + "&"
-											+ r_user.getLose();
-
+									String records = "READRECO&" + r_user.getId() + "&" + r_user.getWin() + "&" + r_user.getLose();
 									for (PrintWriter writer : writers.keySet()) {
 										if (splitMessage[1].contentEquals(writers.get(writer))) {
-											// Message & [sender] & content
 											writer.println(records);
-											// System.out.println("SENT!");
 											break;
 										}
 									}
@@ -633,106 +370,73 @@ public class GameServer {
 								}
 							}
 						}
-					} // if(game) close.
+					}
 
-					// Gamingìœ¼ë¡œ ì‹œì‘í•˜ëŠ” ë¬¸ì¥ì´ë¼ë©´,
-					else if (splitMessage[0].equalsIgnoreCase("gaming")) {
-						// Message ë¼ë©´,
-						if (splitMessage[3].equalsIgnoreCase("message")) {
-							// splitMessage[4] (ë©”ì„¸ì§€ ë‚´ìš©)ì„ id2ì—ê²Œ ë³´ë‚´ì£¼ê¸°.
-							for (PrintWriter writer : writers.keySet()) {
+					else if (splitMessage[0].equalsIgnoreCase("gaming")) { //gamingÀ¸·Î ½ÃÀÛÇÏ´Â ¹®ÀåÀÏ °æ¿ì
+						if (splitMessage[3].equalsIgnoreCase("message")) { //´Ü¼ø messageÀÇ °æ¿ì
+							for (PrintWriter writer : writers.keySet()) { //message¸¦ »ó´ë À¯Àú¿¡°Ô º¸¿©ÁÖ±â
 								if (splitMessage[1].contentEquals(writers.get(writer))) {
-									// Message & [sender] & content
 									writer.println("MESSAGE&" + splitMessage[1] + "&" + splitMessage[4]);
-									// System.out.println("SENT!");
 									break;
 								}
 							}
 						}
-						// GameMessage ë¼ë©´,
-						else if (splitMessage[3].equalsIgnoreCase("gamingmessage")) {
-
-							// splitMessage[4] (ë©”ì„¸ì§€ ë‚´ìš©)ì„ id2ì—ê²Œ ë³´ë‚´ì£¼ê¸°.
-							for (PrintWriter writer : writers.keySet()) {
-								// ???????? ì™œ [sender]í•œí…Œ ë³´ë‚´ì•¼ ì œëŒ€ë¡œ ê°€ëŠ”ê±°ì§€;
+						else if (splitMessage[3].equalsIgnoreCase("gamingmessage")) { //game messageÀÏ °æ¿ì
+							for (PrintWriter writer : writers.keySet()) { //game message¸¦ »ó´ë À¯Àú¿¡°Ô º¸¿©ÁÖ±â
 								if (splitMessage[1].contentEquals(writers.get(writer))) {
-									// Message & [sender] & content
-									// Gaming & [receiver] & [sender] & GamingMessage & Numbers & result
 									System.out.println("[receiver]: " + splitMessage[1]);
-									// GAMINGMESSAGE & [receiver] & Numbers & result
-									writer.println("GAMINGMESSAGE&" + splitMessage[1] + "&" + splitMessage[4] + "&"
-											+ splitMessage[5]);
+									writer.println("GAMINGMESSAGE&" + splitMessage[1] + "&" + splitMessage[4] + "&" + splitMessage[5]);
 									break;
 								}
 							}
 						}
-						// Gaming ê²°ê³¼ ê°±ì‹ ë©”ì„¸ì§€ë¼ë©´,
-						// Gaming & [sender] & GameResult & [win/lose]
-						else if (splitMessage[2].equalsIgnoreCase("gameresult")) {
-							// ìŠ¹ì´ë¼ë©´,
-							if (splitMessage[3].equalsIgnoreCase("win")) {
-								// [sender]ì˜ win í•˜ë‚˜ ì˜¬ë ¤ì£¼ê¸°.
-								for (Person p : players) {
-									// playersì— ìˆëŠ” IDì™€ ì§€ê¸ˆ ë°›ì€ IDê°€ ê°™ë‹¤ë©´,
+
+						else if (splitMessage[2].equalsIgnoreCase("gameresult")) { //gameÀÇ resultÀÏ °æ¿ì
+							if (splitMessage[3].equalsIgnoreCase("win")) { //winÀÏ °æ¿ì
+								for (Person p : players) { //sender win ÀüÀû 1 Ãß°¡
 									if (p.getId().equals(splitMessage[1])) {
-										// win í•˜ë‚˜ ì¦ê°€.
 										p.setWin(p.getWin() + 1);
 									}
 								}
 							}
-							// íŒ¨ë¼ë©´,
-							else if (splitMessage[3].equalsIgnoreCase("lose")) {
-								// [sender]ì˜ lose í•˜ë‚˜ ì˜¬ë ¤ì£¼ê¸°.
-								for (Person p : players) {
-									// playersì— ìˆëŠ” IDì™€ ì§€ê¸ˆ ë°›ì€ IDê°€ ê°™ë‹¤ë©´,
+							else if (splitMessage[3].equalsIgnoreCase("lose")) { //loseÀÏ °æ¿ì
+								for (Person p : players) { //sender lose ÀüÀû 1 Ãß°¡
 									if (p.getId().equals(splitMessage[1])) {
-										// loseí•˜ë‚˜ ì¦ê°€.
 										p.setLose(p.getLose() + 1);
 									}
 								}
 							}
 						}
-
-						// í•­ë³µë©”ì„¸ì§€ë¼ë©´, // gaming & surrender & [me] & [opp]
-						else if (splitMessage[1].equalsIgnoreCase("surrender")) {
+						else if (splitMessage[1].equalsIgnoreCase("surrender")) { //surrenderÀÇ °æ¿ì
 							System.out.println(splitMessage[2] + " / " + splitMessage[3] + " / " + splitMessage[4]);
-
 						}
-
 					}
-
-				} // close while
-
-				// stream ìƒì„±ì—ì„œ ë¬¸ì œê°€ ìƒê¸°ë©´,
+				}
+            
 			} catch (Exception e) {
-				// nothing to do
 			} finally {
-				// ë§Œì•½ outì´ nullì´ ì•„ë‹ˆë¼ë©´ 'writers' hash setì—ì„œ clientì˜ outì„ ì§€ìš´ë‹¤.
 				if (out != null) {
 					writers.remove(out);
 				}
-				// ë§Œì•½ idì´ nullì´ ì•„ë‹ˆë¼ë©´ í•´ë‹¹ clientê°€ ë– ë‚¬ë‹¤ê³  ì¶œë ¥í•˜ê³  'ids' hash setì—ì„œ clientì˜ ì´ë¦„ì„ ì§€ìš´ë‹¤.
 				if (id != null) {
 					System.out.println(id + " is leaving");
 					ids.remove(id);
 					ids_chat.remove(id);
 
-					// ì‹¤í–‰ì¤‘ì¸ clientë“¤ì—ê²Œ ì´ clientê°€ ë– ë‚¬ë‹¤ëŠ” ë©”ì„¸ì§€ë¥¼ ë³´ë‚¸ë‹¤.
 					for (PrintWriter writer : writers.keySet()) {
 						String ID = writers.get(writer);
-						if (!ids_chat.contains(ID)) { // ***ids_chatì•ˆì— ì´ writerë¥¼ ì“°ëŠ” ì‚¬ëŒì´ ìˆë‹¤ë©´, ***
+						if (!ids_chat.contains(ID)) {
 							continue;
 						}
 						writer.println("MESSAGE " + id + " has left");
 						writer.println("OUTPLAYER " + id);
 					}
-				} // close if
+				}
 				try {
-					socket.close(); // socketì„ ë‹«ì•„ í•´ë‹¹ clientì™€ì˜ ì—°ê²°ì„ ì¢…ë£Œí•œë‹¤.
+					socket.close(); // socket close, clinet¿ÍÀÇ Åë½Å Á¾·á
 				} catch (IOException e) {
-				} // ì˜¤ë¥˜ê°€ ë°œìƒí•œë‹¤ë©´ catchí•œë‹¤.
-			} // close finally
-		}// close run
-
+				}
+			}
+		}
 	}
 }
