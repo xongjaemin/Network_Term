@@ -1,17 +1,12 @@
 import java.io.*;
 import java.util.*;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import java.awt.Font;
-import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -20,14 +15,11 @@ import javax.swing.JTextArea;
 import javax.swing.JLabel;
 
 public class oneOnOneRoom extends JFrame {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5426882505287106218L;
 	@SuppressWarnings("unused")
-	private String id1; // ë‚˜
+	private String id1; //ÇÃ·¹ÀÌ¾î1
 	@SuppressWarnings("unused")
-	private String id2; // ìƒëŒ€
+	private String id2; //Àa·¹ÀÌ¾î2
 	@SuppressWarnings("unused")
 	private Scanner in;
 	@SuppressWarnings("unused")
@@ -36,11 +28,7 @@ public class oneOnOneRoom extends JFrame {
 	private JPanel contentPane;
 	private JTextField chatField;
 
-	/**
-	 * Create the frame.
-	 */
 	public oneOnOneRoom(String id1, String id2, PrintWriter out, Scanner in) {
-		// init
 		this.id1 = id1;
 		this.id2 = id2;
 		this.out = out;
@@ -60,20 +48,20 @@ public class oneOnOneRoom extends JFrame {
 		
 		JLabel lblOneOnOne = new JLabel("1:1 Room");
 		lblOneOnOne.setBounds(17, 30, 121, 36);
-		lblOneOnOne.setFont(new Font("ë§‘ì€ ê³ ë”•", Font.BOLD, 26));
+		lblOneOnOne.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 26));
 		
 		JButton readyBtn = new JButton("Ready");
 		readyBtn.setBounds(451, 503, 91, 23);
 		readyBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// í˜„ì¬ ready ìƒíƒœë¼ë©´
+				// ÇöÀç ready »óÅÂ¶ó¸é
 				if (readyBtn.getText().equalsIgnoreCase("ready")) {
 					String str = "Game&" + id1 + "&" + id2 + "&" + "Ready";
 					out.println(str);
 					System.out.println(str + " sent.");
 					readyBtn.setText("CANCEL");
 				}
-				// ì•„ë‹ˆë¼ë©´
+				// ¾Æ´Ï¶ó¸é
 				else {
 					String str = "Game&" + id1 + "&" + id2 + "&" + "Cancel";
 					out.println(str);
@@ -86,9 +74,8 @@ public class oneOnOneRoom extends JFrame {
 		JButton recordBtn = new JButton("Record");
 		recordBtn.setBounds(554, 503, 91, 23);
 		recordBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Game & [sender] & [receiver] & showInfo
-				String str = "Game&" + id1 + "&" + id2 + "&showInfo";
+			public void actionPerformed(ActionEvent e) {	
+				String str = "Game&" + id1 + "&" + id2 + "&showInfo"; //Game & ÇÃ·¹ÀÌ¾î1 & ÇÃ·¹ÀÌ¾î2 & showInfo
 				out.println(str);
 				System.out.println("Request " + id2 + "'s info");
 			}
@@ -98,11 +85,8 @@ public class oneOnOneRoom extends JFrame {
 		exitBtn.setBounds(657, 503, 91, 23);
 		exitBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				out.println("Game&" + id1 + "&" + id2 + "&Message&" + "»ó´ë°¡ ¶°³µ½À´Ï´Ù. Exit¸¦ ´­·¯ ³ª°¡ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù."); //»ó´ë°¡ ³ª°£°ÍÀ» ¾Ë·ÁÁÖ±â
 				
-				//ìƒëŒ€ì—ê²Œ ë‚˜ê°”ë‹¤ê³  ì•Œë ¤ì£¼ê¸°.
-				out.println("Game&" + id1 + "&" + id2 + "&Message&" + "ìƒëŒ€ê°€ ë– ë‚¬ìŠµë‹ˆë‹¤. Exitë¥¼ ëˆŒëŸ¬ ë‚˜ê°€ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤."); // Serverë¡œ ì „ì†¡
-				
-				// ??
 				try {
 					oneOnOneRoom.this.setVisible(false);
 					WaitRoomFrame waitRoom = new WaitRoomFrame (id1, out, in);
@@ -133,46 +117,23 @@ public class oneOnOneRoom extends JFrame {
 
 		chatField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// enter ë°©ì§€.
-				if (chatField.getText().equalsIgnoreCase(""))
+				if (chatField.getText().equalsIgnoreCase("")) //enterÅ° ¹æÁö
 					return;
 				chatArea.append(id1 + " : " + chatField.getText() + "\n");
 				chatArea.setCaretPosition(chatArea.getDocument().getLength());
-				out.println("Game&" + id1 + "&" + id2 + "&Message&" + chatField.getText()); // text ì…ë ¥í•œ ê²ƒ Serverë¡œ ì „ì†¡
-				chatField.setText("");// text field ë¹ˆ ë¬¸ì¥ìœ¼ë¡œ ì´ˆê¸°í™”
+				out.println("Game&" + id1 + "&" + id2 + "&Message&" + chatField.getText()); //text ÀÔ·ÂÇÑ °ÍÀ» Server·Î Àü¼Û
+				chatField.setText("");//textfield ºó ¹®ÀåÀ¸·Î ÃÊ±âÈ­
 			}
 		});
 
-		/**
-		 * ready ë²„íŠ¼ ê²Œì„ì—ì„œ, ë‚´ê°€ readyí–ˆë‹¤ê³  ìƒëŒ€ì—ê²Œ ì•Œë ¤ì¤˜. Game&[sender]&[receiver]&Ready <<button
-		 * click>>
-		 * 
-		 */
-		String strIn;
-		// ì‘ë‹µì´ ìˆìœ¼ë©´,
-		while (in.hasNext()) {
-			// ë°›ì•„ì˜¤ê³ 
+		//ÇÃ¸®ÀÌ¾î1ÀÌ ready ¹öÆ° Å¬¸¯ÇÏ¸é ÇÃ·¹ÀÌ¾î1ÀÌ readyÇÏ¸é ÇÃ·¹ÀÌ¾î2ÇÑÅ× ¾Ë¸®±â
+		String strIn; //ÇÃ·¹ÀÌ¾î2°¡ ÀÀ´äÇÏ¸é
+		while (in.hasNext()) { //ÀÀ´ä ¹Ş¾Æ¿À±â
 			strIn = in.nextLine();
-			// check
-			// System.out.println(strIn);
 
 			String[] splitMessage = strIn.split("&");
-			// readyë¼ë©´,
-			/*
-			if (splitMessage[0].equalsIgnoreCase("ready")) {
-				// ë…¸ë€ìƒ‰ìœ¼ë¡œ ë°”ê¿”ì£¼ê¸°.
-				btnOther.setBackground(new Color(255, 255, 051));
-			}
-			// cancelí•˜ë©´,
-			else if (splitMessage[0].equalsIgnoreCase("cancel")) {
-				// ê¸°ë³¸ ìƒ‰ìƒìœ¼ë¡œ ë°”ê¿”ì£¼ê¸°.
-				btnOther.setBackground(new Color(253, 245, 230));
-			}
-			*/
-			// ê²Œì„ ì‹œì‘ ëª…ë ¹ì´ë©´,
-			if (splitMessage[0].equalsIgnoreCase("gamestart")) {
+			if (splitMessage[0].equalsIgnoreCase("gamestart")) { //°ÔÀÓ½ÃÀÛ ¸í·ÉÀÏ °æ¿ì
 				System.out.println("Game Start");
-				// System.out.println(splitMessage[3]);
 				this.setVisible(false);
 				boolean turnFirst = true;
 				if (splitMessage[1].compareTo(splitMessage[2]) < 0) {
@@ -180,16 +141,14 @@ public class oneOnOneRoom extends JFrame {
 				}
 				new Game(splitMessage[1], splitMessage[2], in, out, turnFirst);
 			}
-			// messageë°›ëŠ” ê²ƒì´ë¼ë©´, Message & [sender] & contents
-			else if (splitMessage[0].equalsIgnoreCase("message")) {
-				// ì½˜ì†”ì°½ì— ì¶œë ¥.
-				System.out.println(splitMessage[1] + " : " + splitMessage[2]);
-				// textAreaì— ì¶œë ¥.
-				chatArea.append(splitMessage[1] + " : " + splitMessage[2] + "\n");
+
+			else if (splitMessage[0].equalsIgnoreCase("message")) { //messageÀÔ·ÂÀÏ °æ¿ì, Message & sender & contents
+				System.out.println(splitMessage[1] + " : " + splitMessage[2]); //message Ãâ·Â
+				chatArea.append(splitMessage[1] + " : " + splitMessage[2] + "\n"); // textArea¿¡ Ãâ·Â.
 				chatArea.setCaretPosition(chatArea.getDocument().getLength());
 			}
-			// READRECO & [id] & [win] & [lose]
-			else if (splitMessage[0].equalsIgnoreCase("readreco")) {
+
+			else if (splitMessage[0].equalsIgnoreCase("readreco")) { //°¢ ¾ÆÀÌµğº°·Î ½ÂÆĞ Á¤º¸ ÀĞ¾î¿À±â
 				JOptionPane.showMessageDialog(this,
 						"ID : " + splitMessage[1] + "\nWins : " + splitMessage[2] + "\nLoses : " + splitMessage[3],
 						splitMessage[1] + "'s Records", JOptionPane.INFORMATION_MESSAGE);
