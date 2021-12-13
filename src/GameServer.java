@@ -1,9 +1,10 @@
-
+import java.io.BufferedWriter;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -49,8 +50,12 @@ public class GameServer {
    @SuppressWarnings("resource")
    public static void main(String[] args) throws Exception {
       // 파일에 접근해서 읽어올 stream 생성.
+	   
       ObjectInputStream inputStream = null;
-
+      /*
+      BufferedWriter file = new BufferedWriter(new FileWriter(fileName));
+      file.close();
+      */
       try {
          // inputStream 생성.
          inputStream = new ObjectInputStream(new FileInputStream(new File(GameServer.fileName)));
@@ -132,6 +137,9 @@ public class GameServer {
                   }
                   System.out.println("==============================");
                }
+               
+               
+            
                // 저장하고 종료하기
                if (str.equalsIgnoreCase("/stop")) {
                   ObjectOutputStream outputStream = null;
@@ -161,8 +169,8 @@ public class GameServer {
                      }
                   }
                }
-               
-               
+  
+              
                
                if(str.toLowerCase().startsWith("/add")) {
                   String[] splitmessage = str.split(" ");
@@ -348,24 +356,65 @@ public class GameServer {
                      }
                   }
 
+                  
+                  
+                  
+                  
+                  
+                  
                   // 회원가입성공했을때정보저장
                   else if (splitMessage[1].toLowerCase().startsWith("success")) {
                      // name저장
-                     if (splitMessage[2].equalsIgnoreCase("name")) {
-                        user.setName(splitMessage[3]);
-                     }
+                	  
+                	  ObjectOutputStream outputStream = null;
+                      Person newUser = new Person("","","",0,0);
+          
+                      if (splitMessage[2].equalsIgnoreCase("name")) {
+                          user.setName(splitMessage[3]);
+                          newUser.setName(splitMessage[3]);
+                       }
+                      
+                      else if (splitMessage[2].equalsIgnoreCase("id")) {
+                          user.setId(splitMessage[3]);
+                          newUser.setId(splitMessage[3]);
+                       }
+                       // pw저장
+                       else if (splitMessage[2].equalsIgnoreCase("pw")) {
+                          byte[] targetBytes = splitMessage[3].getBytes();
+                          byte[] encodedBytes = encoder.encode(targetBytes);
+                          String password = new String(encodedBytes);
+                          user.setPw(password);
+                          newUser.setPw(password);
+                          pws.add(newUser.getPw()); //이건 삭제해야할수도 있음
+                          out.println("signUp&complete");
+                       }
+
+                      players.add(newUser);
+                	  
+                      
+                      try {
+                         // 파일에 저장할 outputStream 생성.
+                         outputStream = new ObjectOutputStream(new FileOutputStream(new File(GameServer.fileName)));
+                         // players에 저장된 모든 Person 정보 저장.
+                         for (Person p : players) {
+                            outputStream.writeObject(p);
+                         }
+                      } catch (FileNotFoundException e) {
+                         e.printStackTrace();
+                      } catch (IOException e) {
+                         e.printStackTrace();
+                      } finally {
+                         try {
+                            // stream close.
+                            outputStream.close();
+                         } catch (IOException e) {
+                            e.printStackTrace();
+                         }
+                      }
+                	                    
+                     
                      // id저장
-                     else if (splitMessage[2].equalsIgnoreCase("id")) {
-                        user.setId(splitMessage[3]);
-                     }
-                     // pw저장
-                     else if (splitMessage[2].equalsIgnoreCase("pw")) {
-                        byte[] targetBytes = splitMessage[3].getBytes();
-                        byte[] encodedBytes = encoder.encode(targetBytes);
-                        String password = new String(encodedBytes);
-                        user.setPw(password);
-                        out.println("signUp&complete");
-                     }
+                     
                      // 이상한명령 등장한경우
                      // else {
                      // System.out.println("Error");

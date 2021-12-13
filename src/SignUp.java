@@ -181,14 +181,7 @@ public class SignUp extends JFrame {
 				String id = textField_1.getText();
 				String pw = passwordField.getText();
 				String pwCheck = erdpasswordField_1.getText();
-				String regExp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\\W)(?=\\S+$).{8,20}$";
-				String regExp2 = "^(?=.*[0-9])(?=.*[a-z]).{4,10}$";
-				// (?=.*[0-9]): 0~9까지숫자최소한개
-				// (?=.*[a-z]): 영문소문자 최소 한개
-				// (?=.*[A-Z]): 영문대문자 최소 한개
-				// (?=.*\\W): 특수문자 최소 한개
-				// (?=\\S+$): 공백 허용 안함
-				// .{8,20}: 8~20자리 문자열
+			
 
 				// name에 아무것도 입력하지 않았을 때 팝업창띠우기
 				if (name.equals("")) {
@@ -199,17 +192,12 @@ public class SignUp extends JFrame {
 					JOptionPane.showMessageDialog(null, "id를 입력하시오");
 				}
 				// id에 조건안맞을때 팝업창띠우기
-				else if (id.matches(regExp2) == false) {
-					JOptionPane.showMessageDialog(null, "id는 영문 소문자,숫자 최소 1개 포함한 \n4-10 자리여야 합니다.");
-				}
+
 				// pw에 아무것도 입력하지 않았을 때 팝업창띠우기
 				else if (pw.equals("")) {
 					JOptionPane.showMessageDialog(null, "pw를 입력하시오");
 				}
-				// pw에 조건안맞을때 팝업창띠우기
-				else if (pw.matches(regExp) == false) {
-					JOptionPane.showMessageDialog(null, "pw는 영문 소문자,대문자,숫자,특수기호를 최소 1개 포함한 \n8-20 자리여야 합니다.");
-				}
+
 				// pwCheck에 아무것도 입력하지 않았을 때 팝업창띠우기
 				else if (pwCheck.equals("")) {
 					JOptionPane.showMessageDialog(null, "pw를 한번더 입력하시오");
