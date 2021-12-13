@@ -53,13 +53,11 @@ public class GameServer {
       } catch (Exception e) {
       }
 
-      System.out.println("CREAD INFORMATION FROM FILE COMPLETE.");
+      System.out.println("READ INFORMATION FROM FILE COMPLETE.");
       System.out.println("Server Success");
 
       new Thread(new Runnable() {
          public void run() {
-            Scanner sc = new Scanner(System.in);
-            String str;
          }
       }).start();
 
