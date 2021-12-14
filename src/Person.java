@@ -4,14 +4,13 @@ public class Person implements Serializable{
 	
 	private static final long serialVersionUID = -5545523340140992213L;
 	
-	private String name; // ÀÌ¸§
+	private String name; // 이름
 	private String Id; // ID
 	private String pw; // PassWord
-	private int win; // ÀÌ±ä È½¼ö
-	private int lose; // Áø È½¼ö
-	private String inTime; // last enter time
+	private int win; // 승리 횟수
+	private int lose; // 패배 횟수
+	private String inTime; // 마지막 접속 시간
 	
-	//constructor
 	public Person(String name, String Id, String pw, int win, int lose) {
 		this.name = name;
 		this.Id = Id;
@@ -20,8 +19,7 @@ public class Person implements Serializable{
 		this.lose = lose;
 	}
 	
-	//getter
-	public String getName() {
+	public String getName() { //getter
 		return name;
 	}
 	public String getId() {
@@ -40,8 +38,7 @@ public class Person implements Serializable{
 		return inTime;
 	}
 	
-	//setter
-	public void setName(String name) {
+	public void setName(String name) { //setter
 		this.name = name;
 	}
 	public void setId(String Id) {
