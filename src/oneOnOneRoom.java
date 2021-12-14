@@ -17,9 +17,9 @@ import javax.swing.JLabel;
 public class oneOnOneRoom extends JFrame {
 	private static final long serialVersionUID = 5426882505287106218L;
 	@SuppressWarnings("unused")
-	private String id1; //ÇÃ·¹ÀÌ¾î1
+	private String id1; //í”Œë ˆì´ì–´1
 	@SuppressWarnings("unused")
-	private String id2; //Àa·¹ÀÌ¾î2
+	private String id2; //aë ˆì´ì–´2
 	@SuppressWarnings("unused")
 	private Scanner in;
 	@SuppressWarnings("unused")
@@ -34,7 +34,7 @@ public class oneOnOneRoom extends JFrame {
 		this.out = out;
 		this.in = in;
 
-		this.setTitle(id1 + "'s Waiting Room");
+		this.setTitle(id1 + " - 1:1 Room");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
@@ -48,20 +48,20 @@ public class oneOnOneRoom extends JFrame {
 		
 		JLabel lblOneOnOne = new JLabel("1:1 Room");
 		lblOneOnOne.setBounds(17, 30, 121, 36);
-		lblOneOnOne.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 26));
+		lblOneOnOne.setFont(new Font("ë§‘ì€ ê³ ë”•", Font.BOLD, 26));
 		
 		JButton readyBtn = new JButton("Ready");
-		readyBtn.setBounds(451, 503, 91, 23);
+		readyBtn.setBounds(554, 503, 91, 23);
 		readyBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// ÇöÀç ready »óÅÂ¶ó¸é
+				// í˜„ì¬ ready ìƒíƒœë¼ë©´
 				if (readyBtn.getText().equalsIgnoreCase("ready")) {
 					String str = "Game&" + id1 + "&" + id2 + "&" + "Ready";
 					out.println(str);
 					System.out.println(str + " sent.");
 					readyBtn.setText("CANCEL");
 				}
-				// ¾Æ´Ï¶ó¸é
+				// ì•„ë‹ˆë¼ë©´
 				else {
 					String str = "Game&" + id1 + "&" + id2 + "&" + "Cancel";
 					out.println(str);
@@ -71,21 +71,12 @@ public class oneOnOneRoom extends JFrame {
 
 			}
 		});
-		JButton recordBtn = new JButton("Record");
-		recordBtn.setBounds(554, 503, 91, 23);
-		recordBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {	
-				String str = "Game&" + id1 + "&" + id2 + "&showInfo"; //Game & ÇÃ·¹ÀÌ¾î1 & ÇÃ·¹ÀÌ¾î2 & showInfo
-				out.println(str);
-				System.out.println("Request " + id2 + "'s info");
-			}
-		});
 		
 		JButton exitBtn = new JButton("Exit");
 		exitBtn.setBounds(657, 503, 91, 23);
 		exitBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				out.println("Game&" + id1 + "&" + id2 + "&Message&" + "»ó´ë°¡ ¶°³µ½À´Ï´Ù. Exit¸¦ ´­·¯ ³ª°¡ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù."); //»ó´ë°¡ ³ª°£°ÍÀ» ¾Ë·ÁÁÖ±â
+				out.println("Game&" + id1 + "&" + id2 + "&Message&" + "ìƒëŒ€ê°€ ë– ë‚¬ìŠµë‹ˆë‹¤. Exitë¥¼ ëˆŒëŸ¬ ë‚˜ê°€ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤."); //ìƒëŒ€ê°€ ë‚˜ê°„ê²ƒì„ ì•Œë ¤ì£¼ê¸°
 				
 				try {
 					oneOnOneRoom.this.setVisible(false);
@@ -101,7 +92,6 @@ public class oneOnOneRoom extends JFrame {
 		contentPane.setLayout(null);
 		contentPane.add(chatField);
 		contentPane.add(readyBtn);
-		contentPane.add(recordBtn);
 		contentPane.add(exitBtn);
 		contentPane.add(lblOneOnOne);
 		
@@ -112,27 +102,43 @@ public class oneOnOneRoom extends JFrame {
 		JTextArea chatArea = new JTextArea();
 		scrollPane.setViewportView(chatArea);
 		chatArea.setEditable(false);
+		
+		JButton sendBtn = new JButton("Send");
+		sendBtn.setBounds(445, 503, 97, 23);
+		
+		sendBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (chatField.getText().equalsIgnoreCase("")) //enterí‚¤ ë°©ì§€
+					return;
+				chatArea.append(id1 + " : " + chatField.getText() + "\n");
+				chatArea.setCaretPosition(chatArea.getDocument().getLength());
+				out.println("Game&" + id1 + "&" + id2 + "&Message&" + chatField.getText()); //text ì…ë ¥í•œ ê²ƒì„ Serverë¡œ ì „ì†¡
+				chatField.setText("");//textfield ë¹ˆ ë¬¸ì¥ìœ¼ë¡œ ì´ˆê¸°í™”
+			}
+		});
+		
+		contentPane.add(sendBtn);
 
 		this.setVisible(true);
 
 		chatField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (chatField.getText().equalsIgnoreCase("")) //enterÅ° ¹æÁö
+				if (chatField.getText().equalsIgnoreCase("")) //enterí‚¤ ë°©ì§€
 					return;
 				chatArea.append(id1 + " : " + chatField.getText() + "\n");
 				chatArea.setCaretPosition(chatArea.getDocument().getLength());
-				out.println("Game&" + id1 + "&" + id2 + "&Message&" + chatField.getText()); //text ÀÔ·ÂÇÑ °ÍÀ» Server·Î Àü¼Û
-				chatField.setText("");//textfield ºó ¹®ÀåÀ¸·Î ÃÊ±âÈ­
+				out.println("Game&" + id1 + "&" + id2 + "&Message&" + chatField.getText()); //text ì…ë ¥í•œ ê²ƒì„ Serverë¡œ ì „ì†¡
+				chatField.setText("");//textfield ë¹ˆ ë¬¸ì¥ìœ¼ë¡œ ì´ˆê¸°í™”
 			}
 		});
 
-		//ÇÃ¸®ÀÌ¾î1ÀÌ ready ¹öÆ° Å¬¸¯ÇÏ¸é ÇÃ·¹ÀÌ¾î1ÀÌ readyÇÏ¸é ÇÃ·¹ÀÌ¾î2ÇÑÅ× ¾Ë¸®±â
-		String strIn; //ÇÃ·¹ÀÌ¾î2°¡ ÀÀ´äÇÏ¸é
-		while (in.hasNext()) { //ÀÀ´ä ¹Ş¾Æ¿À±â
+		//í”Œë¦¬ì´ì–´1ì´ ready ë²„íŠ¼ í´ë¦­í•˜ë©´ í”Œë ˆì´ì–´1ì´ readyí•˜ë©´ í”Œë ˆì´ì–´2í•œí…Œ ì•Œë¦¬ê¸°
+		String strIn; //í”Œë ˆì´ì–´2ê°€ ì‘ë‹µí•˜ë©´
+		while (in.hasNext()) { //ì‘ë‹µ ë°›ì•„ì˜¤ê¸°
 			strIn = in.nextLine();
 
 			String[] splitMessage = strIn.split("&");
-			if (splitMessage[0].equalsIgnoreCase("gamestart")) { //°ÔÀÓ½ÃÀÛ ¸í·ÉÀÏ °æ¿ì
+			if (splitMessage[0].equalsIgnoreCase("gamestart")) { //ê²Œì„ì‹œì‘ ëª…ë ¹ì¼ ê²½ìš°
 				System.out.println("Game Start");
 				this.setVisible(false);
 				boolean turnFirst = true;
@@ -142,17 +148,12 @@ public class oneOnOneRoom extends JFrame {
 				new Game(splitMessage[1], splitMessage[2], in, out, turnFirst);
 			}
 
-			else if (splitMessage[0].equalsIgnoreCase("message")) { //messageÀÔ·ÂÀÏ °æ¿ì, Message & sender & contents
-				System.out.println(splitMessage[1] + " : " + splitMessage[2]); //message Ãâ·Â
-				chatArea.append(splitMessage[1] + " : " + splitMessage[2] + "\n"); // textArea¿¡ Ãâ·Â.
+			else if (splitMessage[0].equalsIgnoreCase("message")) { //messageì…ë ¥ì¼ ê²½ìš°, Message & sender & contents
+				System.out.println(splitMessage[1] + " : " + splitMessage[2]); //message ì¶œë ¥
+				chatArea.append(splitMessage[1] + " : " + splitMessage[2] + "\n"); // textAreaì— ì¶œë ¥.
 				chatArea.setCaretPosition(chatArea.getDocument().getLength());
 			}
 
-			else if (splitMessage[0].equalsIgnoreCase("readreco")) { //°¢ ¾ÆÀÌµğº°·Î ½ÂÆĞ Á¤º¸ ÀĞ¾î¿À±â
-				JOptionPane.showMessageDialog(this,
-						"ID : " + splitMessage[1] + "\nWins : " + splitMessage[2] + "\nLoses : " + splitMessage[3],
-						splitMessage[1] + "'s Records", JOptionPane.INFORMATION_MESSAGE);
-			}
 		}
 
 	}

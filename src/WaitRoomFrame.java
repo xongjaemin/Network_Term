@@ -12,7 +12,7 @@ public class WaitRoomFrame {
 	String who = "all";
 
 	int user_index = 0; //player index
-	String[] requestType = { "Request Game", "Show Record" };
+	String[] requestType = { "Invite Game", "Show Information" };
 
 	JFrame frame = new JFrame("Waiting Room");
 	JPanel chatPanel = new JPanel();
@@ -33,7 +33,7 @@ public class WaitRoomFrame {
 
 		frame.setSize(1000, 600);
 		frame.setResizable(false);
-		frame.setTitle(user + "'s Waiting Room");
+		frame.setTitle(user + " - Waiting Room");
 		frame.getContentPane().setBackground(new Color(224, 255, 255));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -81,6 +81,12 @@ public class WaitRoomFrame {
 		
 		JButton sendBtn = new JButton("Send");
 		sendBtn.setBounds(602, 499, 105, 23);
+		sendBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { //textField에서 enter을 받았을 경우
+				out.println("CHAT&" + chatTextField.getText()); //text를 읽어와 server에 보냄
+				chatTextField.setText(""); //textField 빈 문장을 초기화
+			}
+		});
 		frame.getContentPane().add(sendBtn);
 		logOutBtn.setBounds(818, 500, 91, 23);
 		
@@ -155,7 +161,7 @@ public class WaitRoomFrame {
 
 					users[user_index].addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
-							int choose = JOptionPane.showOptionDialog(frame, "What do you want to do?", "To " + otherID, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, requestType, null); //유저 아이디 버튼을 누를 경우
+							int choose = JOptionPane.showOptionDialog(frame, "Select", otherID, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, requestType, null); //유저 아이디 버튼을 누를 경우
 							if (choose == 0)
 								requestGame(otherID); //게임 요청
 							else if (choose == 1)
@@ -195,7 +201,7 @@ public class WaitRoomFrame {
 			else if (line.startsWith("REQUESTGAME")) { //REQUESTGAME로 시작할 경우
 
 				String[] rq_arr = line.split(" ");
-					int check = JOptionPane.showConfirmDialog(frame, "\"" + rq_arr[1] + "\" requests game to you!\n Do you want to play?",rq_arr[1] + "'s Game Request", JOptionPane.YES_NO_OPTION); //게임 요청 확인하기
+					int check = JOptionPane.showConfirmDialog(frame, "\"" + rq_arr[1] + "\"  invite you to game",rq_arr[1] + "'s invititation", JOptionPane.YES_NO_OPTION); //게임 요청 확인하기
 				if (check == JOptionPane.YES_OPTION) {
 					out.println("CHAT&REPLYTO " + rq_arr[1] + " yes");
 
@@ -221,7 +227,7 @@ public class WaitRoomFrame {
 					new oneOnOneRoom(user, rq_arr[1], out, in); //player2의 일대일 채팅방 열기
 					return;
 				} else {
-					JOptionPane.showMessageDialog(frame, "The request for " + rq_arr[1] + " was rejected.", "Reply from " + rq_arr[1], JOptionPane.OK_OPTION);
+					JOptionPane.showMessageDialog(frame, "Rejected", "Reply from " + rq_arr[1], JOptionPane.OK_OPTION);
 				}
 			}
 			frame.setVisible(true);

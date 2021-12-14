@@ -1,10 +1,13 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -13,15 +16,14 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
 
 public class GamePlayer {
 	public static JFrame frame = new JFrame("login");
-	public static SignUp signUp;
+	public static Register register;
 	public static Socket socket;
 	private JPanel contentPane;
 	private JTextField txtGame;
-	private JTextField txtId;
-	private JTextField txtPw_1;
 	private JPasswordField passwordField;
 	static String user;
 	String id;
@@ -48,7 +50,7 @@ public class GamePlayer {
 		contentPane.setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(5, 5, 635, 381);
+		panel.setBounds(0, 0, 645, 391);
 		panel.setBackground(Color.WHITE);
 		contentPane.add(panel);
 
@@ -60,7 +62,7 @@ public class GamePlayer {
 		btnLogin.setBackground(Color.LIGHT_GRAY);
 		btnLogin.setFont(new Font("Microsoft Tai Le", Font.BOLD, 21));
 
-		JButton btnJoin = new JButton("Sign Up");
+		JButton btnJoin = new JButton("Register");
 		btnJoin.setBounds(372, 262, 128, 68);
 		btnJoin.setBackground(Color.LIGHT_GRAY);
 		btnJoin.setFont(new Font("Microsoft Tai Le", Font.BOLD, 21));
@@ -71,36 +73,28 @@ public class GamePlayer {
 		txtGame.setHorizontalAlignment(SwingConstants.CENTER);
 		txtGame.setFont(new Font("Microsoft Tai Le", Font.BOLD, 30));
 		txtGame.setEditable(false);
-		txtGame.setText("WORD RELAY 2021");
+		txtGame.setText("WORD CHAIN 2021");
 		txtGame.setColumns(10);
-
-		txtId = new JTextField();
-		txtId.setBounds(124, 179, 48, 26);
-		txtId.setEditable(false);
-		txtId.setFont(new Font("Microsoft Tai Le", Font.BOLD, 15));
-		txtId.setHorizontalAlignment(SwingConstants.LEFT);
-		txtId.setText("ID");
-		txtId.setColumns(10);
-
-		txtPw_1 = new JTextField();
-		txtPw_1.setBounds(124, 214, 48, 26);
-		txtPw_1.setEditable(false);
-		txtPw_1.setFont(new Font("Microsoft Tai Le", Font.BOLD, 15));
-		txtPw_1.setHorizontalAlignment(SwingConstants.LEFT);
-		txtPw_1.setText("PW");
-		txtPw_1.setColumns(10);
 
 		passwordField = new JPasswordField();
 		passwordField.setBounds(184, 217, 316, 21);
 		panel.setLayout(null);
-		panel.add(txtId);
-		panel.add(txtPw_1);
 		panel.add(txtrId);
 		panel.add(passwordField);
 		panel.add(btnLogin);
 		panel.add(txtGame);
 		panel.add(btnJoin);
-		// gui끝
+		
+		JLabel IdLabel = new JLabel("ID");
+		IdLabel.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+		IdLabel.setBounds(124, 185, 57, 15);
+		panel.add(IdLabel);
+		
+		JLabel pwLabel = new JLabel("PW");
+		pwLabel.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+		pwLabel.setBounds(124, 220, 57, 15);
+		panel.add(pwLabel);
+		
 
 		frame.setVisible(true);
 
@@ -134,9 +128,9 @@ public class GamePlayer {
 		});
 
 		btnJoin.addActionListener(new ActionListener() { //회원가입 버튼을 누를 경우
-			public void actionPerformed(ActionEvent e) { //SignUp창 띄우기
-				signUp = new SignUp(out, in);
-				signUp.setVisible(true);
+			public void actionPerformed(ActionEvent e) { //Register 창 띄우기
+				register = new Register(out, in);
+				register.setVisible(true);
 				frame.setVisible(false);
 			}
 		});
@@ -206,7 +200,7 @@ public class GamePlayer {
 				}
 
 			}
-			Person newUser = new Person(NAME, ID, PW, Integer.parseInt(WIN), Integer.parseInt(LOSE));
+			User newUser = new User(NAME, ID, PW, Integer.parseInt(WIN), Integer.parseInt(LOSE));
 
 			frame.setVisible(false);
 			frame.dispose();
@@ -218,5 +212,4 @@ public class GamePlayer {
 
 		}
 	}
-
 }

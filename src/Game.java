@@ -42,7 +42,7 @@ public class Game extends JFrame {
 		this.out = out; //outputStream
 		Game.turn = turn; //turn
 
-		this.setTitle(id1 + "'s Game Room"); //°ÔÀÓ ¹æ ÀÌ¸§ ¼³Á¤
+		this.setTitle(id1 + " - Game"); //ê²Œì„ ë°© ì´ë¦„ ì„¤ì •
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 755, 457);
@@ -61,11 +61,11 @@ public class Game extends JFrame {
 
 		JLabel lblGame = new JLabel("Game");
 		lblGame.setBounds(17, 26, 72, 36);
-		lblGame.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 26));
+		lblGame.setFont(new Font("ë§‘ì€ ê³ ë”•", Font.BOLD, 26));
 		
 		JLabel lblChat = new JLabel("Chat");
 		lblChat.setBounds(472, 26, 72, 36);
-		lblChat.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 26));
+		lblChat.setFont(new Font("ë§‘ì€ ê³ ë”•", Font.BOLD, 26));
 		
 		JScrollPane gameScrollPane = new JScrollPane();
 		gameScrollPane.setBounds(17, 68, 448, 282);
@@ -80,9 +80,9 @@ public class Game extends JFrame {
 		gameScrollPane.setViewportView(gameTextArea);
 		chatTextArea.setEditable(false);
 		if (Game.turn == true) {
-			gameTextArea.append("´ç½Å Â÷·ÊÀÔ´Ï´Ù" + "\n");
+			gameTextArea.append("msg - Your turn" + "\n");
 		} else {
-			gameTextArea.append("»ó´ë¹æÀÇ Â÷·ÊÀÔ´Ï´Ù" + "\n");
+			gameTextArea.append("msg - Opponent's turn" + "\n");
 			turnCount++;
 		}
 		contentPane.setLayout(null);
@@ -100,25 +100,25 @@ public class Game extends JFrame {
 		
 		gameSendBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// enter ¹æÁö.
+				// enter ë°©ì§€.
 				if (gameTextField.getText().equalsIgnoreCase(""))
 					return;
 				else {
-					if (Game.turn == true) { //ÀÚ½ÅÀÇ ÅÏÀÏ °æ¿ì
+					if (Game.turn == true) { //ìì‹ ì˜ í„´ì¼ ê²½ìš°
 								gameTextArea.append(id1 + " : " + gameTextField.getText() + "\n");
-								gameTextArea.setCaretPosition(gameTextArea.getDocument().getLength()); //text Ã¼Å©
+								gameTextArea.setCaretPosition(gameTextArea.getDocument().getLength()); //text ì²´í¬
 								String str = checkResult(gameTextField.getText());
-								Global.currentString = gameTextField.getText(); //text º¸¿©ÁÖ±â
+								Global.currentString = gameTextField.getText(); //text ë³´ì—¬ì£¼ê¸°
 								gameTextArea.append(id1 + "'s result : " + str + "\n");
 								gameTextArea.append(id2 + "'s turn" + "\n\n");
 								gameTextArea.setCaretPosition(gameTextArea.getDocument().getLength());
-								out.println("Gaming&" + id1 + "&" + id2 + "&GamingMessage&" + gameTextField.getText() + "&"	+ str); // text Àü¼Û
+								out.println("Gaming&" + id1 + "&" + id2 + "&GamingMessage&" + gameTextField.getText() + "&"	+ str); // text ì „ì†¡
 								gameTextField.setText("");
 
-								if (str.equals("wrong")) { //ÀÔ·ÂÇÑ text°¡ Æ²·ÇÀ» °æ¿ì
+								if (str.equals("wrong")) { //ì…ë ¥í•œ textê°€ í‹€ë ·ì„ ê²½ìš°
 									JOptionPane.showMessageDialog(Game.this, "You Lose!");
-									out.println("Gaming&" + id1 + "&GameResult&Lose"); //Áø ÀüÀû ÇÑ³ª ¿Ã¸®±â
-									Game.this.setVisible(false); //¸ŞÀÎÃ¢ ³Ñ¾î°¡±â
+									out.println("Gaming&" + id1 + "&GameResult&Lose"); //ì§„ ì „ì  í•œë‚˜ ì˜¬ë¦¬ê¸°
+									Game.this.setVisible(false); //ë©”ì¸ì°½ ë„˜ì–´ê°€ê¸°
 									try {
 										new WaitRoomFrame(id1,out,in).run();
 									} catch (IOException e1) {
@@ -127,11 +127,11 @@ public class Game extends JFrame {
 									}
 								}
 
-								Game.turn = !Game.turn; //»ó´ëÅÏÀ¸·Î ³Ñ±â±â
+								Game.turn = !Game.turn; //ìƒëŒ€í„´ìœ¼ë¡œ ë„˜ê¸°ê¸°
 
 					}
-					else { ///ÀÚ½ÅÀÇ ÅÏÀÌ ¾Æ´Ò °æ¿ì
-						gameTextArea.append("»ó´ë°¡ ÀÔ·ÂÇÒ ¶§±îÁö ±â´Ù·ÁÁÖ¼¼¿ä" + "\n");
+					else { ///ìì‹ ì˜ í„´ì´ ì•„ë‹ ê²½ìš°
+						gameTextArea.append("msg - Wait for your opponent to enter" + "\n");
 						gameTextArea.setCaretPosition(gameTextArea.getDocument().getLength());
 						gameTextField.setText("");
 					}
@@ -144,28 +144,28 @@ public class Game extends JFrame {
 		chatSendBtn.setBounds(660, 368, 74, 23);
 		chatSendBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (chatTextField.getText().equalsIgnoreCase("")) //enter Å° ¹æÁö
+				if (chatTextField.getText().equalsIgnoreCase("")) //enter í‚¤ ë°©ì§€
 					return;
 				chatTextArea.append(id1 + " : " + chatTextField.getText() + "\n");
 				chatTextArea.setCaretPosition(chatTextArea.getDocument().getLength());
-				out.println("Gaming&" + id1 + "&" + id2 + "&Message&" + chatTextField.getText()); // text Server·Î Àü¼Û
-				chatTextField.setText("");// text field ºó ¹®ÀåÀ¸·Î ÃÊ±âÈ­
+				out.println("Gaming&" + id1 + "&" + id2 + "&Message&" + chatTextField.getText()); // text Serverë¡œ ì „ì†¡
+				chatTextField.setText("");// text field ë¹ˆ ë¬¸ì¥ìœ¼ë¡œ ì´ˆê¸°í™”
 			}
 		});
 
 		contentPane.add(chatSendBtn);
 		
-		JButton surrenderBtn = new JButton("Surrender"); //Ç×º¹¹öÆ° ´©¸¦°æ¿ì
+		JButton surrenderBtn = new JButton("Surrender"); //í•­ë³µë²„íŠ¼ ëˆ„ë¥¼ê²½ìš°
 		surrenderBtn.setBounds(373, 368, 92, 23);
 		surrenderBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				out.println("Gaming&" + id1 + "&GameResult&Lose"); //ÆĞ ÀüÀû ÇÏ³ª Ãß°¡ ÇÏ±â
+				out.println("Gaming&" + id1 + "&GameResult&Lose"); //íŒ¨ ì „ì  í•˜ë‚˜ ì¶”ê°€ í•˜ê¸°
 				gameEnds = 1;
-				JOptionPane.showMessageDialog(Game.this,"YOU LOSE!");
+				JOptionPane.showMessageDialog(Game.this,"YOU Lose!");
 				
-				out.println("Gaming&" + id1 + "&" + id2 + "&Message&" + "»ó´ë°¡ ¶°³µ½À´Ï´Ù.\n Surrender¹öÆ°À» ´­·¯ ³ª°¡ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù.\n(ÆĞ¹è´Â Àû¿ëµÇÁö ¾Ê½À´Ï´Ù.)"); // text Server·Î Àü¼Û
+				out.println("Gaming&" + id1 + "&" + id2 + "&Message&" + "ìƒëŒ€ê°€ ë– ë‚¬ìŠµë‹ˆë‹¤.\n Surrenderë²„íŠ¼ì„ ëˆŒëŸ¬ ë‚˜ê°€ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤.\n(íŒ¨ë°°ëŠ” ì ìš©ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.)"); // text Serverë¡œ ì „ì†¡
 
-				Game.this.setVisible(false); //¸ŞÀÎÃ¢ ³Ñ¾î°¡±â
+				Game.this.setVisible(false); //ë©”ì¸ì°½ ë„˜ì–´ê°€ê¸°
 				try {
 					new WaitRoomFrame(id1,out,in).run();
 				} catch (IOException e1) {
@@ -180,37 +180,37 @@ public class Game extends JFrame {
 
 		this.setVisible(true);
 
-		chatTextField.addActionListener(new ActionListener() { //´Ü¼ø message º¸³»±â
+		chatTextField.addActionListener(new ActionListener() { //ë‹¨ìˆœ message ë³´ë‚´ê¸°
 			public void actionPerformed(ActionEvent e) {
-				if (chatTextField.getText().equalsIgnoreCase("")) //enterÅ° ¹æÁö
+				if (chatTextField.getText().equalsIgnoreCase("")) //enterí‚¤ ë°©ì§€
 					return;
 				chatTextArea.append(id1 + " : " + chatTextField.getText() + "\n");
 				chatTextArea.setCaretPosition(chatTextArea.getDocument().getLength());
-				out.println("Gaming&" + id1 + "&" + id2 + "&Message&" + chatTextField.getText()); // text Server·Î Àü¼Û
-				chatTextField.setText("");// text field ºó ¹®ÀåÀ¸·Î ÃÊ±âÈ­
+				out.println("Gaming&" + id1 + "&" + id2 + "&Message&" + chatTextField.getText()); // text Serverë¡œ ì „ì†¡
+				chatTextField.setText("");// text field ë¹ˆ ë¬¸ì¥ìœ¼ë¡œ ì´ˆê¸°í™”
 			}
 		});
 
-		gameTextField.addActionListener(new ActionListener() { //game message º¸³»±â
+		gameTextField.addActionListener(new ActionListener() { //game message ë³´ë‚´ê¸°
 			public void actionPerformed(ActionEvent e) {
-				if (gameTextField.getText().equalsIgnoreCase("")) //enterÅ° ¹æÁö
+				if (gameTextField.getText().equalsIgnoreCase("")) //enterí‚¤ ë°©ì§€
 					return;
 				else {
-					if (Game.turn == true) { //ÀÚ½ÅÀÇ ÅÏÀÏ °æ¿ì
+					if (Game.turn == true) { //ìì‹ ì˜ í„´ì¼ ê²½ìš°
 								gameTextArea.append(id1 + " : " + gameTextField.getText() + "\n");
 								gameTextArea.setCaretPosition(gameTextArea.getDocument().getLength());
-								String str = checkResult(gameTextField.getText()); //text Ã¼Å©
-								Global.currentString = gameTextField.getText(); //text Âï¾îÁÖ±â
+								String str = checkResult(gameTextField.getText()); //text ì²´í¬
+								Global.currentString = gameTextField.getText(); //text ì°ì–´ì£¼ê¸°
 								gameTextArea.append(id1 + "'s result : " + str + "\n");
 								gameTextArea.append(id2 + "'s turn" + "\n\n");
 								gameTextArea.setCaretPosition(gameTextArea.getDocument().getLength());
-								out.println("Gaming&" + id1 + "&" + id2 + "&GamingMessage&" + gameTextField.getText() + "&" + str); // text Àü¼Û
+								out.println("Gaming&" + id1 + "&" + id2 + "&GamingMessage&" + gameTextField.getText() + "&" + str); // text ì „ì†¡
 								gameTextField.setText("");
 								
-								if (str.equals("wrong")) { //ÀÔ·ÂÇÑ text°¡ Æ²·ÈÀ» °æ¿ì
+								if (str.equals("wrong")) { //ì…ë ¥í•œ textê°€ í‹€ë ¸ì„ ê²½ìš°
 									JOptionPane.showMessageDialog(Game.this, "You Lose!");
-									out.println("Gaming&" + id1 + "&GameResult&Lose"); //ÆĞ¹è ÀüÀû 1 Ãß°¡
-									Game.this.setVisible(false); //¸ŞÀÎÃ¢ ³Ñ¾î°¡±â
+									out.println("Gaming&" + id1 + "&GameResult&Lose"); //íŒ¨ë°° ì „ì  1 ì¶”ê°€
+									Game.this.setVisible(false); //ë©”ì¸ì°½ ë„˜ì–´ê°€ê¸°
 									try {
 										new WaitRoomFrame(id1,out,in).run();
 									} catch (IOException e1) {
@@ -219,11 +219,11 @@ public class Game extends JFrame {
 									}
 								}
 
-								Game.turn = !Game.turn; //»ó´ëÅÏ ³Ñ±â±â
+								Game.turn = !Game.turn; //ìƒëŒ€í„´ ë„˜ê¸°ê¸°
 
 					}
-					else { //ÀÚ½ÅÀÇ ÅÏÀÌ ¾Æ´Ò °æ¿ì
-						gameTextArea.append("»ó´ë°¡ ÀÔ·ÂÇÒ ¶§±îÁö ±â´Ù·ÁÁÖ¼¼¿ä" + "\n");
+					else { //ìì‹ ì˜ í„´ì´ ì•„ë‹ ê²½ìš°
+						gameTextArea.append("msg - Wait for your opponent to enter" + "\n");
 						gameTextArea.setCaretPosition(gameTextArea.getDocument().getLength());
 						gameTextField.setText("");
 					}
@@ -234,19 +234,19 @@ public class Game extends JFrame {
 
 
 		String strIn;
-		while (in.hasNext()) { //ÀÀ´äÀÌ ÀÖÀ» °æ¿ì
-			strIn = in.nextLine(); //string ¹Ş¾Æ¿À±â
+		while (in.hasNext()) { //ì‘ë‹µì´ ìˆì„ ê²½ìš°
+			strIn = in.nextLine(); //string ë°›ì•„ì˜¤ê¸°
 			 System.out.println(strIn); //string check
 
 			String[] splitMessage = strIn.split("&");
 
-			if (splitMessage[0].equalsIgnoreCase("message")) { //´Ü¼ø messageÀÏ °æ¿ì
-				System.out.println(splitMessage[1] + " : " + splitMessage[2]); //console¿¡ Ãâ·Â
-				chatTextArea.append(splitMessage[1] + " : " + splitMessage[2] + "\n"); //textArea¿¡ Ãâ·Â
+			if (splitMessage[0].equalsIgnoreCase("message")) { //ë‹¨ìˆœ messageì¼ ê²½ìš°
+				System.out.println(splitMessage[1] + " : " + splitMessage[2]); //consoleì— ì¶œë ¥
+				chatTextArea.append(splitMessage[1] + " : " + splitMessage[2] + "\n"); //textAreaì— ì¶œë ¥
 				chatTextArea.setCaretPosition(chatTextArea.getDocument().getLength());
 			}
 
-			else if (splitMessage[0].equalsIgnoreCase("gamingmessage")) { //game messageÀÏ °æ¿ì
+			else if (splitMessage[0].equalsIgnoreCase("gamingmessage")) { //game messageì¼ ê²½ìš°
 				System.out.println(splitMessage[1] + " : " + splitMessage[2]);
 				Global.currentString = splitMessage[2];
 				gameTextArea.append(splitMessage[1] + " : " + splitMessage[2] + "\n");
@@ -254,11 +254,11 @@ public class Game extends JFrame {
 				gameTextArea.append(splitMessage[1] + "'s result : " + splitMessage[3] + "\n");
 				gameTextArea.setCaretPosition(gameTextArea.getDocument().getLength());
 
-				if (splitMessage[3].startsWith("wrong")) { //ÀÔ·ÂÇÑ text°¡ Æ²·ÈÀ» °æ¿ì
-					JOptionPane.showMessageDialog(Game.this, "YOU win!");
+				if (splitMessage[3].startsWith("wrong")) { //ì…ë ¥í•œ textê°€ í‹€ë ¸ì„ ê²½ìš°
+					JOptionPane.showMessageDialog(Game.this, "YOU Win!");
 					gameEnds = 1;
-					out.println("Gaming&" + id1 + "&GameResult&Win"); //½Â¸® ÀüÀû 1 Ãß°¡
-					Game.this.setVisible(false); //¸ŞÀÎÃ¢ ³Ñ¾î°¡±â
+					out.println("Gaming&" + id1 + "&GameResult&Win"); //ìŠ¹ë¦¬ ì „ì  1 ì¶”ê°€
+					Game.this.setVisible(false); //ë©”ì¸ì°½ ë„˜ì–´ê°€ê¸°
 					try {
 						new WaitRoomFrame(id1,out,in).run();
 					} catch (IOException e1) {
@@ -269,11 +269,7 @@ public class Game extends JFrame {
 					break;
 				}
 
-				Game.turn = !Game.turn; //»ó´ëÅÏ ³Ñ±â±â
-			}
-			else if (splitMessage[0].equalsIgnoreCase("readreco")) { //ÀüÀû ÀĞ¾î¿À±â
-				JOptionPane.showMessageDialog(this,
-						"ID : " + splitMessage[1] + "\nWins : " + splitMessage[2] + "\nLoses : " + splitMessage[3], splitMessage[1] + "'s Records", JOptionPane.INFORMATION_MESSAGE);
+				Game.turn = !Game.turn; //ìƒëŒ€í„´ ë„˜ê¸°ê¸°
 			}
 
 		}
